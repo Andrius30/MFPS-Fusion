@@ -2,13 +2,13 @@
 #
 # Get latest from https://github.com/github/gitignore/blob/main/Unity.gitignore
 #
-MFPS Fusion/[Ll]ibrary/
-MFPS Fusion/[Tt]emp/
-MFPS Fusion/[Oo]bj/
-MFPS Fusion/[Bb]uild/
-MFPS Fusion/[Bb]uilds/
-MFPS Fusion/[Ll]ogs/
-MFPS Fusion/[Uu]ser[Ss]ettings/
+MFPSFusion/[Ll]ibrary/
+MFPSFusion/[Tt]emp/
+MFPSFusion/[Oo]bj/
+MFPSFusion/[Bb]uild/
+MFPSFusion/[Bb]uilds/
+MFPSFusion/[Ll]ogs/
+MFPSFusion/[Uu]ser[Ss]ettings/
 
 # MemoryCaptures can get excessive in size.
 # They also could contain extremely sensitive data
