@@ -1,17 +1,27 @@
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class Inputs : MonoBehaviour
+public class Inputs
 {
     Keyboard keyboard;
     Mouse mouse;
 
+    public void Init()
+    {
+        keyboard = Keyboard.current;
+        mouse = Mouse.current;
+    }
+
     public float GetHorizontal() => Input.GetAxis("Horizontal");
     public float GetVertical() => Input.GetAxis("Vertical");
+    public bool SpacePressed() => keyboard.spaceKey.wasPressedThisFrame;
+    public bool SpaceReleased() => keyboard.spaceKey.wasReleasedThisFrame;
 
 
     // Mouse
 
     public float GetMouseX() => Input.GetAxisRaw("Mouse X");
     public float GetMouseY() => Input.GetAxisRaw("Mouse Y");
+
 }
