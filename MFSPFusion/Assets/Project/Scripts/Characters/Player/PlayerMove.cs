@@ -18,7 +18,7 @@ public class PlayerMove
         horizontal = controller.Inputs.GetHorizontal();
         vertical = controller.Inputs.GetVertical();
 
-        controller.transform.position += (controller.transform.forward * vertical + controller.transform.right * horizontal).normalized * Time.deltaTime * controller.PlayerSpeed;
+        controller.transform.position += (controller.transform.forward * vertical + controller.transform.right * horizontal).normalized * Time.deltaTime * controller.currentSpeed;
 
     }
 }

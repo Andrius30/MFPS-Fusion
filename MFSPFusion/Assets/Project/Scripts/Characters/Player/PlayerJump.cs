@@ -28,6 +28,7 @@ public class PlayerJump
 
     Vector3 Gravity(Vector3 pos)
     {
+        if (!controller.useGravity) return rb.velocity;
         if (!controller.groundCheck.IsGrounded())
         {
             pos.y += controller.gravity * Time.deltaTime;
@@ -41,6 +42,7 @@ public class PlayerJump
             pos.y = controller.jumpHeight;
             jumpBufferCount = 0;
             hangCount = 0;
+            controller.ChangeState(PlayerController.PlayerStates.JUMPING);
         }
         if (controller.Inputs.SpaceReleased() && rb.velocity.y > 0)
         {
@@ -64,6 +66,7 @@ public class PlayerJump
         if (controller.groundCheck.IsGrounded())
         {
             hangCount = hangTime;
+            controller.ChangeState(PlayerController.PlayerStates.NORMAL);
         }
         else
         {

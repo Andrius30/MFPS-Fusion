@@ -17,7 +17,14 @@ public class GroundCheck
 
     public void Visualize()
     {
-        Gizmos.color = Color.red;
+        if (IsGrounded())
+        {
+            Gizmos.color = Color.green;
+        }
+        else
+        {
+            Gizmos.color = Color.red;
+        }
         Gizmos.DrawWireSphere(groundCheckTransform.position, groundCheckRadius);
     }
 }
