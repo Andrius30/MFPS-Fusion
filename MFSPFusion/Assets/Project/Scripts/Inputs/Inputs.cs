@@ -18,6 +18,8 @@ public class Inputs
     public bool SpacePressed() => keyboard.spaceKey.wasPressedThisFrame;
     public bool SpaceReleased() => keyboard.spaceKey.wasReleasedThisFrame;
     public bool CKeyHolding() => keyboard.cKey.isPressed;
+    public bool LeftShiftHolding() => keyboard.leftShiftKey.IsPressed();
+    internal bool LeftShiftReleased() => keyboard.leftShiftKey.wasReleasedThisFrame;
 
 
     // Mouse

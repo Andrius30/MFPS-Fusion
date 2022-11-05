@@ -6,40 +6,49 @@ public class PlayerController : MonoBehaviour
     public enum PlayerStates
     {
         NORMAL,
-        RUNNING,
+        SPRINT,
+        CROUCH,
         WALL_RUNNING,
         WALL_CLIMB,
     }
-    [SerializeField] PlayerStates currentState;
-    [SerializeField] float playerSpeed;
-    [SerializeField] float mouseSensitivity;
-    public Transform cameraPosTransform;
 
-    [Header("Jump settings")]
-    public float gravity = -9.81f;
-    public float jumpHeight = 7f;
+    #region Move settings
+    [FoldoutGroup("Move settings"), SerializeField] PlayerStates currentState;
+    [FoldoutGroup("Move settings"), SerializeField] float playerSpeed;
+    [FoldoutGroup("Move settings"), SerializeField] float playerSprintSpeed;
+    [FoldoutGroup("Move settings"), SerializeField] float playerCrouchSpeed;
+    [FoldoutGroup("Move settings"), SerializeField] float mouseSensitivity;
+    [FoldoutGroup("Move settings")] public Transform cameraPosTransform;
+    #endregion
 
+    #region Jump settings
+    [FoldoutGroup("Jump and gravity")] public float gravity = -9.81f;
+    [FoldoutGroup("Jump and gravity")] public float jumpHeight = 7f;
+    #endregion
+
+    #region Wall running
     [FoldoutGroup("Wall Running")] public LayerMask wallMask;
     [FoldoutGroup("Wall Running")] public float wallCheckDistance;
     [FoldoutGroup("Wall Running")] public float wallRunSpeed;
     [HideInInspector] public RaycastHit leftWallHit;
     [HideInInspector] public RaycastHit rightWallHit;
     [HideInInspector] public bool wallLeft;
-    [HideInInspector] public bool wallRight;
+    [HideInInspector] public bool wallRight; 
+    #endregion
 
     #region Ground Check
-    [Header("Ground Check")]
     [FoldoutGroup("Ground Check")] public LayerMask groundMask;
     [FoldoutGroup("Ground Check")] public Transform groundCheckTransform;
     [FoldoutGroup("Ground Check")] public float groundCheckRadius;
     [FoldoutGroup("Ground Check")] public bool useGravity = true;
     #endregion
 
-    [Header("Wall Climb settings")]
+    #region Wall climb
     [FoldoutGroup("Wall Climb")] public float wallClimbSpeed;
     [FoldoutGroup("Wall Climb")] public float wallClimbCheckRadius = .5f;
     [FoldoutGroup("Wall Climb")] public float wallClimbDetectionLength = 1f;
-    [FoldoutGroup("Wall Climb")] public float maxClimbAngle = 30f;
+    [FoldoutGroup("Wall Climb")] public float maxClimbAngle = 30f; 
+    #endregion
 
     #region Getters
     public Inputs Inputs
@@ -59,9 +68,12 @@ public class PlayerController : MonoBehaviour
 
     #endregion
 
+    #region hide in inspector
     [HideInInspector] public bool wallRunning;
     [HideInInspector] public float currentSpeed;
     [HideInInspector] public GroundCheck groundCheck;
+    [HideInInspector] public Vector3 moveDirection; 
+    #endregion
 
     #region Class objects
     PlayerModel playerModel;
@@ -98,12 +110,16 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    void ChangeSpeedbasedOnState()
+    void ChangeSpeedBasedOnState()
     {
         switch (currentState)
         {
             case PlayerStates.NORMAL:
                 currentSpeed = playerSpeed;
+                playerMove.Move();
+                break;
+            case PlayerStates.SPRINT:
+                currentSpeed = playerSprintSpeed;
                 playerMove.Move();
                 break;
             case PlayerStates.WALL_RUNNING:
@@ -124,7 +140,7 @@ public class PlayerController : MonoBehaviour
         playerJump.Jump();
         wallRun.WallrunChecks();
         wallClimb.ClimbChecks();
-        ChangeSpeedbasedOnState();
+        ChangeSpeedBasedOnState();
     }
 
     void OnDrawGizmos()
