@@ -18,11 +18,11 @@ public class PlayerSlopeMovement
     public void SlopeMove()
     {
         bool onSlope = CheckForSlope();
-        controller.useGravity = !onSlope;
+        if (controller.currentState != PlayerController.PlayerStates.WALL_RUNNING)
+            controller.useGravity = !onSlope;
 
         if (onSlope && !controller.exitingSlope)
         {
-            Debug.Log($"on slope");
             rb.AddForce(GetSlopeMoveDirection() * controller.currentSpeed * 20f, ForceMode.Force);
             if (rb.velocity.y > 0)
             {

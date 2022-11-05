@@ -20976,8 +20976,12 @@ MonoBehaviour:
   playerSprintSpeed: 12
   playerCrouchSpeed: 3.5
   playerCrouchScale: 0.5
+  maxSlopeAngle: 45
+  slopeSpeed: 5
+  slopeCheckDistance: 0.7
   mouseSensitivity: 200
   cameraPosTransform: {fileID: 539802709}
+  exitingSlope: 0
   gravity: -19.62
   jumpHeight: 10
   wallMask:

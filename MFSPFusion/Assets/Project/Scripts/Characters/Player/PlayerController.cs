@@ -10,15 +10,18 @@ public class PlayerController : MonoBehaviour
         CROUCH,
         WALL_RUNNING,
         WALL_CLIMB,
+        SLOPE,
+
     }
 
     #region Move settings
-    [FoldoutGroup("Move settings"), SerializeField] PlayerStates currentState;
+    [FoldoutGroup("Move settings")] public PlayerStates currentState;
     [FoldoutGroup("Move settings"), SerializeField] float playerSpeed;
     [FoldoutGroup("Move settings"), SerializeField] float playerSprintSpeed;
     [FoldoutGroup("Move settings")] public float playerCrouchSpeed;
     [FoldoutGroup("Move settings")] public float playerCrouchScale;
     [FoldoutGroup("Move settings")] public float maxSlopeAngle = 45f;
+    [FoldoutGroup("Move settings")] public float slopeSpeed;
     [FoldoutGroup("Move settings")] public float slopeCheckDistance = 0.7f;
     [FoldoutGroup("Move settings"), SerializeField] float mouseSensitivity;
     [FoldoutGroup("Move settings")] public Transform cameraPosTransform;
@@ -142,21 +145,22 @@ public class PlayerController : MonoBehaviour
                 currentSpeed = wallClimbSpeed;
                 wallClimb.Climb();
                 break;
-
         }
     }
-
+    void FixedUpdate()
+    {
+        ChangeSpeedBasedOnState();
+        playerCrouch.Crouch();
+        playerSlopeMovement.SlopeMove();
+    }
     void Update()
     {
         playerModel.RotatePlayer();
         playerJump.Jump();
         wallRun.WallrunChecks();
         wallClimb.ClimbChecks();
-        playerCrouch.Crouch();
         playerMove.Sprint();
-        playerSlopeMovement.SlopeMove();
-
-        ChangeSpeedBasedOnState();
+        playerCrouch.CrouchInputs();
     }
 
     void OnDrawGizmos()
