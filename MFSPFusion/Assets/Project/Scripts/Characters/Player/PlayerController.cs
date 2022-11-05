@@ -16,9 +16,13 @@ public class PlayerController : MonoBehaviour
     [FoldoutGroup("Move settings"), SerializeField] PlayerStates currentState;
     [FoldoutGroup("Move settings"), SerializeField] float playerSpeed;
     [FoldoutGroup("Move settings"), SerializeField] float playerSprintSpeed;
-    [FoldoutGroup("Move settings"), SerializeField] float playerCrouchSpeed;
+    [FoldoutGroup("Move settings")] public float playerCrouchSpeed;
+    [FoldoutGroup("Move settings")] public float playerCrouchScale;
+    [FoldoutGroup("Move settings")] public float maxSlopeAngle = 45f;
+    [FoldoutGroup("Move settings")] public float slopeCheckDistance = 0.7f;
     [FoldoutGroup("Move settings"), SerializeField] float mouseSensitivity;
     [FoldoutGroup("Move settings")] public Transform cameraPosTransform;
+    [FoldoutGroup("Move settings")] public bool exitingSlope = false;
     #endregion
 
     #region Jump settings
@@ -33,7 +37,7 @@ public class PlayerController : MonoBehaviour
     [HideInInspector] public RaycastHit leftWallHit;
     [HideInInspector] public RaycastHit rightWallHit;
     [HideInInspector] public bool wallLeft;
-    [HideInInspector] public bool wallRight; 
+    [HideInInspector] public bool wallRight;
     #endregion
 
     #region Ground Check
@@ -47,7 +51,7 @@ public class PlayerController : MonoBehaviour
     [FoldoutGroup("Wall Climb")] public float wallClimbSpeed;
     [FoldoutGroup("Wall Climb")] public float wallClimbCheckRadius = .5f;
     [FoldoutGroup("Wall Climb")] public float wallClimbDetectionLength = 1f;
-    [FoldoutGroup("Wall Climb")] public float maxClimbAngle = 30f; 
+    [FoldoutGroup("Wall Climb")] public float maxClimbAngle = 30f;
     #endregion
 
     #region Getters
@@ -70,9 +74,9 @@ public class PlayerController : MonoBehaviour
 
     #region hide in inspector
     [HideInInspector] public bool wallRunning;
-    [HideInInspector] public float currentSpeed;
+    [ReadOnly] public float currentSpeed;
     [HideInInspector] public GroundCheck groundCheck;
-    [HideInInspector] public Vector3 moveDirection; 
+    [HideInInspector] public Vector3 moveDirection;
     #endregion
 
     #region Class objects
@@ -82,6 +86,8 @@ public class PlayerController : MonoBehaviour
     PlayerJump playerJump;
     PlayerWallRun wallRun;
     PlayerClimb wallClimb;
+    PlayerCrouch playerCrouch;
+    PlayerSlopeMovement playerSlopeMovement;
 
     #endregion
 
@@ -93,6 +99,8 @@ public class PlayerController : MonoBehaviour
         playerJump = new PlayerJump(this);
         wallRun = new PlayerWallRun(this);
         wallClimb = new PlayerClimb(this);
+        playerCrouch = new PlayerCrouch(this);
+        playerSlopeMovement = new PlayerSlopeMovement(this);
 
         CameraController.onTargetSpawn?.Invoke(cameraPosTransform);
         ChangeState(PlayerStates.NORMAL);
@@ -122,6 +130,10 @@ public class PlayerController : MonoBehaviour
                 currentSpeed = playerSprintSpeed;
                 playerMove.Move();
                 break;
+            case PlayerStates.CROUCH:
+                currentSpeed = playerCrouchSpeed;
+                playerMove.Move();
+                break;
             case PlayerStates.WALL_RUNNING:
                 currentSpeed = wallRunSpeed;
                 wallRun.Run();
@@ -140,6 +152,10 @@ public class PlayerController : MonoBehaviour
         playerJump.Jump();
         wallRun.WallrunChecks();
         wallClimb.ClimbChecks();
+        playerCrouch.Crouch();
+        playerMove.Sprint();
+        playerSlopeMovement.SlopeMove();
+
         ChangeSpeedBasedOnState();
     }
 
@@ -149,6 +165,7 @@ public class PlayerController : MonoBehaviour
         groundCheck.Visualize();
         wallRun.Visualize();
         wallClimb.Visualize();
+        playerSlopeMovement.Visualize();
     }
 
 

@@ -20973,8 +20973,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentState: 0
   playerSpeed: 7
-  playerSprintSpeed: 10
+  playerSprintSpeed: 12
   playerCrouchSpeed: 3.5
+  playerCrouchScale: 0.5
   mouseSensitivity: 200
   cameraPosTransform: {fileID: 539802709}
   gravity: -19.62

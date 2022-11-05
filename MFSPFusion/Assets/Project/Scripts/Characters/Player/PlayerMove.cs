@@ -19,10 +19,9 @@ public class PlayerMove
         controller.moveDirection = (controller.transform.forward * vertical + controller.transform.right * horizontal).normalized;
         controller.transform.position += controller.moveDirection * Time.deltaTime * controller.currentSpeed;
 
-        Sprint();
     }
 
-    void Sprint()
+    public void Sprint()
     {
         if (controller.Inputs.LeftShiftHolding() && vertical > 0)
         {
@@ -31,7 +30,6 @@ public class PlayerMove
         else if (controller.Inputs.LeftShiftReleased())
         {
             controller.ChangeState(PlayerController.PlayerStates.NORMAL);
-
         }
     }
 }

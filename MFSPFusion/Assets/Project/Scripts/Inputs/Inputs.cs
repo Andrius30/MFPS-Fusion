@@ -20,6 +20,8 @@ public class Inputs
     public bool CKeyHolding() => keyboard.cKey.isPressed;
     public bool LeftShiftHolding() => keyboard.leftShiftKey.IsPressed();
     internal bool LeftShiftReleased() => keyboard.leftShiftKey.wasReleasedThisFrame;
+    public bool LeftCtrlHolding() => keyboard.leftCtrlKey.IsPressed();
+    public bool LeftCtrlReleased() => keyboard.leftCtrlKey.wasReleasedThisFrame;
 
 
     // Mouse

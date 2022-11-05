@@ -39,6 +39,7 @@ public class PlayerJump
     {
         if (jumpBufferCount >= 0 && hangCount > 0)
         {
+            controller.exitingSlope = true;
             pos.y = controller.jumpHeight;
             jumpBufferCount = 0;
             hangCount = 0;
@@ -46,6 +47,7 @@ public class PlayerJump
         if (controller.Inputs.SpaceReleased() && rb.velocity.y > 0)
         {
             pos = new Vector3(pos.x, pos.y * .5f, pos.z);
+            controller.exitingSlope = false;
         }
         return pos;
     }
