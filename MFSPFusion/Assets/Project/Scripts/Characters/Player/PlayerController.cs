@@ -6,9 +6,9 @@ public class PlayerController : MonoBehaviour
     public enum PlayerStates
     {
         NORMAL,
-        JUMPING,
         RUNNING,
         WALL_RUNNING,
+        WALL_CLIMB,
     }
     [SerializeField] PlayerStates currentState;
     [SerializeField] float playerSpeed;
@@ -34,6 +34,12 @@ public class PlayerController : MonoBehaviour
     [FoldoutGroup("Ground Check")] public float groundCheckRadius;
     [FoldoutGroup("Ground Check")] public bool useGravity = true;
     #endregion
+
+    [Header("Wall Climb settings")]
+    [FoldoutGroup("Wall Climb")] public float wallClimbSpeed;
+    [FoldoutGroup("Wall Climb")] public float wallClimbCheckRadius = .5f;
+    [FoldoutGroup("Wall Climb")] public float wallClimbDetectionLength = 1f;
+    [FoldoutGroup("Wall Climb")] public float maxClimbAngle = 30f;
 
     #region Getters
     public Inputs Inputs
@@ -63,6 +69,7 @@ public class PlayerController : MonoBehaviour
     Inputs inputs;
     PlayerJump playerJump;
     PlayerWallRun wallRun;
+    PlayerClimb wallClimb;
 
     #endregion
 
@@ -73,6 +80,7 @@ public class PlayerController : MonoBehaviour
         groundCheck = new GroundCheck(groundCheckTransform, groundCheckRadius, groundMask);
         playerJump = new PlayerJump(this);
         wallRun = new PlayerWallRun(this);
+        wallClimb = new PlayerClimb(this);
 
         CameraController.onTargetSpawn?.Invoke(cameraPosTransform);
         ChangeState(PlayerStates.NORMAL);
@@ -96,21 +104,26 @@ public class PlayerController : MonoBehaviour
         {
             case PlayerStates.NORMAL:
                 currentSpeed = playerSpeed;
+                playerMove.Move();
                 break;
             case PlayerStates.WALL_RUNNING:
                 currentSpeed = wallRunSpeed;
+                wallRun.Run();
                 break;
+            case PlayerStates.WALL_CLIMB:
+                currentSpeed = wallClimbSpeed;
+                wallClimb.Climb();
+                break;
+
         }
     }
 
     void Update()
     {
         playerModel.RotatePlayer();
-        playerMove.Move();
         playerJump.Jump();
-        wallRun.Run();
-
-
+        wallRun.WallrunChecks();
+        wallClimb.ClimbChecks();
         ChangeSpeedbasedOnState();
     }
 
@@ -119,6 +132,7 @@ public class PlayerController : MonoBehaviour
         if (groundCheck == null) return;
         groundCheck.Visualize();
         wallRun.Visualize();
+        wallClimb.Visualize();
     }
 
 

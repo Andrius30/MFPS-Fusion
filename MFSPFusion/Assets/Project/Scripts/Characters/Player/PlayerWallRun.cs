@@ -4,17 +4,21 @@ public class PlayerWallRun
 {
     PlayerController controller;
     Rigidbody rb;
+    Vector3 wallNormal;
 
     public PlayerWallRun(PlayerController controller)
     {
         this.controller = controller;
         rb = controller.GetComponent<Rigidbody>();
     }
-
-    public void Run()
+    public void WallrunChecks()
     {
         Check();
         StateMachine();
+
+    }
+    public void Run()
+    {
         if (controller.wallRunning)
         {
             WallRunMovement();
@@ -51,7 +55,7 @@ public class PlayerWallRun
     void WallRunMovement()
     {
         controller.useGravity = false;
-        Vector3 wallNormal = controller.wallRight ? controller.rightWallHit.normal : controller.leftWallHit.normal;
+        wallNormal = controller.wallRight ? controller.rightWallHit.normal : controller.leftWallHit.normal;
         Vector3 wallForward = Vector3.Cross(wallNormal, controller.transform.up);
 
         if ((controller.cameraPosTransform.forward - wallForward).magnitude > (controller.cameraPosTransform.forward - -wallForward).magnitude)
@@ -60,14 +64,16 @@ public class PlayerWallRun
         }
 
         rb.AddForce(wallForward * controller.wallRunSpeed, ForceMode.Force);
-        //if (!(controller.wallLeft && controller.Inputs.GetHorizontal() > 0) && !(controller.wallRight && controller.Inputs.GetHorizontal() < 0))
-        //{
-        //    Debug.Log($"Push to wall");
-        //    rb.AddForce(-wallNormal * 100, ForceMode.Force);
-        //}
+        if ((controller.wallLeft && controller.Inputs.GetHorizontal() > 0) && (controller.wallRight && controller.Inputs.GetHorizontal() < 0))
+        {
+            rb.AddForce(-wallNormal * 100, ForceMode.Force);
+        }
+
     }
     void StopWallRun()
     {
+        //rb.AddForce(wallNormal * 3, ForceMode.Impulse);
+        controller.ChangeState(PlayerController.PlayerStates.NORMAL);
         controller.wallRunning = false;
         controller.useGravity = true;
 
