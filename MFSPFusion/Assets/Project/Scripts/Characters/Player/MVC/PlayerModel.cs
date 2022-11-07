@@ -13,10 +13,10 @@ public class PlayerModel
         this.controller = controller;
     }
 
-    public void RotatePlayer()
+    public void RotatePlayer(NetworkInputs input)
     {
-        float mouseX = controller.Inputs.GetMouseX() * Time.deltaTime * controller.MouseSensitivity;
-        float mouseY = controller.Inputs.GetMouseY() * Time.deltaTime * controller.MouseSensitivity;
+        float mouseX = input.mousex * FusionCallbacks.runner.DeltaTime * controller.MouseSensitivity;
+        float mouseY = input.mousey * FusionCallbacks.runner.DeltaTime * controller.MouseSensitivity;
 
         yRotation += mouseX;
         xRotation -= mouseY;

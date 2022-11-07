@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Windows;
 
 public class PlayerWallRun
 {
@@ -11,10 +12,10 @@ public class PlayerWallRun
         this.controller = controller;
         rb = controller.GetComponent<Rigidbody>();
     }
-    public void WallrunChecks()
+    public void WallrunChecks(NetworkInputs input)
     {
         Check();
-        StateMachine();
+        StateMachine(input);
 
     }
     public void Run()
@@ -30,9 +31,9 @@ public class PlayerWallRun
         controller.wallLeft = Physics.Raycast(controller.transform.position, -controller.cameraPosTransform.right, out controller.leftWallHit, controller.wallCheckDistance, controller.wallMask);
         controller.wallRight = Physics.Raycast(controller.transform.position, controller.cameraPosTransform.right, out controller.rightWallHit, controller.wallCheckDistance, controller.wallMask);
     }
-    void StateMachine()
+    void StateMachine(NetworkInputs input)
     {
-        if ((controller.wallLeft || controller.wallRight) && controller.Inputs.GetVertical() > 0 && !controller.groundCheck.IsGrounded())
+        if ((controller.wallLeft || controller.wallRight) && input.buttons.IsSet(MyButtons.Forward) && !controller.groundCheck.IsGrounded())
         {
             if (!controller.wallRunning)
             {
@@ -64,10 +65,10 @@ public class PlayerWallRun
         }
 
         rb.AddForce(wallForward * controller.wallRunSpeed, ForceMode.Force);
-        if ((controller.wallLeft && controller.Inputs.GetHorizontal() > 0) && (controller.wallRight && controller.Inputs.GetHorizontal() < 0))
-        {
-            rb.AddForce(-wallNormal * 100, ForceMode.Force);
-        }
+        //if ((controller.wallLeft && controller.Inputs.GetHorizontal() > 0) && (controller.wallRight && controller.Inputs.GetHorizontal() < 0))
+        //{
+        //    rb.AddForce(-wallNormal * 100, ForceMode.Force);
+        //}
 
     }
     void StopWallRun()

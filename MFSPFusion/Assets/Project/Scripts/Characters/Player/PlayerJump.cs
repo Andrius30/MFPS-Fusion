@@ -1,5 +1,6 @@
 
 using UnityEngine;
+using UnityEngine.Windows;
 
 public class PlayerJump
 {
@@ -16,12 +17,12 @@ public class PlayerJump
         rb = controller.GetComponent<Rigidbody>();
     }
 
-    public void Jump()
+    public void Jump(NetworkInputs input)
     {
         var pos = rb.velocity;
         HangTimer();
-        JumpBuffer();
-        pos = Jumping(pos);
+        JumpBuffer(input);
+        pos = Jumping(pos, input);
         pos = Gravity(pos);
         rb.velocity = pos;
     }
@@ -31,11 +32,11 @@ public class PlayerJump
         if (!controller.useGravity) return rb.velocity;
         if (!controller.groundCheck.IsGrounded())
         {
-            pos.y += controller.gravity * Time.deltaTime;
+            pos.y += controller.gravity * FusionCallbacks.runner.DeltaTime;
         }
         return pos;
     }
-    Vector3 Jumping(Vector3 pos)
+    Vector3 Jumping(Vector3 pos, NetworkInputs input)
     {
         if (jumpBufferCount >= 0 && hangCount > 0)
         {
@@ -44,16 +45,16 @@ public class PlayerJump
             jumpBufferCount = 0;
             hangCount = 0;
         }
-        if (controller.Inputs.SpaceReleased() && rb.velocity.y > 0)
+        if (input.buttons.IsSet(MyButtons.SpaceReleased) && rb.velocity.y > 0)
         {
             pos = new Vector3(pos.x, pos.y * .5f, pos.z);
             controller.exitingSlope = false;
         }
         return pos;
     }
-    void JumpBuffer()
+    void JumpBuffer(NetworkInputs input)
     {
-        if (controller.Inputs.SpacePressed())
+        if (input.buttons.IsSet(MyButtons.Jump))
         {
             jumpBufferCount = jumpBufferLength;
         }

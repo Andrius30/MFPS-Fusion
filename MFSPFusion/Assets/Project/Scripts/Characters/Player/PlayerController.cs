@@ -1,7 +1,8 @@
+using Fusion;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : NetworkBehaviour
 {
     public enum PlayerStates
     {
@@ -39,8 +40,8 @@ public class PlayerController : MonoBehaviour
     [FoldoutGroup("Wall Running")] public float wallRunSpeed;
     [HideInInspector] public RaycastHit leftWallHit;
     [HideInInspector] public RaycastHit rightWallHit;
-    [HideInInspector] public bool wallLeft;
-    [HideInInspector] public bool wallRight;
+    [ReadOnly] public bool wallLeft;
+    [ReadOnly] public bool wallRight;
     #endregion
 
     #region Ground Check
@@ -121,21 +122,21 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    void ChangeSpeedBasedOnState()
+    void ChangeSpeedBasedOnState(NetworkInputs input)
     {
         switch (currentState)
         {
             case PlayerStates.NORMAL:
                 currentSpeed = playerSpeed;
-                playerMove.Move();
+                playerMove.Move(input);
                 break;
             case PlayerStates.SPRINT:
                 currentSpeed = playerSprintSpeed;
-                playerMove.Move();
+                playerMove.Move(input);
                 break;
             case PlayerStates.CROUCH:
                 currentSpeed = playerCrouchSpeed;
-                playerMove.Move();
+                playerMove.Move(input);
                 break;
             case PlayerStates.WALL_RUNNING:
                 currentSpeed = wallRunSpeed;
@@ -143,24 +144,25 @@ public class PlayerController : MonoBehaviour
                 break;
             case PlayerStates.WALL_CLIMB:
                 currentSpeed = wallClimbSpeed;
-                wallClimb.Climb();
+                wallClimb.Climb(input);
                 break;
         }
     }
-    void FixedUpdate()
+
+    public override void FixedUpdateNetwork()
     {
-        ChangeSpeedBasedOnState();
+        if (GetInput<NetworkInputs>(out var input) == false) return;
+
+        ChangeSpeedBasedOnState(input);
+        playerModel.RotatePlayer(input);
+        playerJump.Jump(input);
+        wallRun.WallrunChecks(input);
+        wallClimb.ClimbChecks(input);
+        playerMove.Sprint(input);
+        playerCrouch.CrouchInputs();
         playerCrouch.Crouch();
         playerSlopeMovement.SlopeMove();
-    }
-    void Update()
-    {
-        playerModel.RotatePlayer();
-        playerJump.Jump();
-        wallRun.WallrunChecks();
-        wallClimb.ClimbChecks();
-        playerMove.Sprint();
-        playerCrouch.CrouchInputs();
+        
     }
 
     void OnDrawGizmos()

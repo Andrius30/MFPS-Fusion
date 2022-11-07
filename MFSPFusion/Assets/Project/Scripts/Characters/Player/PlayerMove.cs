@@ -3,31 +3,39 @@ using UnityEngine;
 public class PlayerMove
 {
     PlayerController controller;
-    float horizontal;
-    float vertical;
+
+    Vector3 direction;
 
     public PlayerMove(PlayerController controller)
     {
         this.controller = controller;
     }
 
-    public void Move()
+    public void Move(NetworkInputs input)
     {
-        horizontal = controller.Inputs.GetHorizontal();
-        vertical = controller.Inputs.GetVertical();
+        direction = Vector3.zero;
+        var forward = input.buttons.IsSet(MyButtons.Forward);
+        var backwards = input.buttons.IsSet(MyButtons.Backward);
+        var right = input.buttons.IsSet(MyButtons.Right);
+        var left = input.buttons.IsSet(MyButtons.Left);
 
-        controller.moveDirection = (controller.transform.forward * vertical + controller.transform.right * horizontal).normalized;
-        controller.transform.position += controller.moveDirection * Time.deltaTime * controller.currentSpeed;
+        if (forward) direction.z += 1f;
+        if (backwards) direction.z -= 1f;
+        if (right) direction.x += 1f;
+        if (left) direction.x -= 1f;
+
+        controller.moveDirection = (controller.transform.forward * direction.z + controller.transform.right * direction.x).normalized;
+        controller.transform.position += controller.moveDirection * FusionCallbacks.runner.DeltaTime * controller.currentSpeed;
 
     }
 
-    public void Sprint()
+    public void Sprint(NetworkInputs input)
     {
-        if (controller.Inputs.LeftShiftHolding() && vertical > 0)
+        if (input.buttons.IsSet(MyButtons.LeftShiftHolding) && input.buttons.IsSet(MyButtons.Forward))
         {
             controller.ChangeState(PlayerController.PlayerStates.SPRINT);
         }
-        else if (controller.Inputs.LeftShiftReleased())
+        else if (input.buttons.IsSet(MyButtons.LeftShiftReleased))
         {
             controller.ChangeState(PlayerController.PlayerStates.NORMAL);
         }

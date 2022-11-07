@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.Accessibility;
+using UnityEngine.Windows;
 
 public class PlayerClimb
 {
@@ -17,11 +18,11 @@ public class PlayerClimb
         rb = controller.GetComponent<Rigidbody>();
     }
 
-    public void ClimbChecks()
+    public void ClimbChecks(NetworkInputs input)
     {
         Check();
         CheckAngle();
-        if (wallInFront && controller.Inputs.GetVertical() > 0 && currentAngle < controller.maxClimbAngle)
+        if (wallInFront && input.buttons.IsSet(MyButtons.Forward) && currentAngle < controller.maxClimbAngle)
         {
             if (!isClimbing)
             {
@@ -33,9 +34,9 @@ public class PlayerClimb
             if (isClimbing) StopClimbing();
         }
     }
-    public void Climb()
+    public void Climb(NetworkInputs input)
     {
-        if (wallInFront && controller.Inputs.GetVertical() > 0 && currentAngle < controller.maxClimbAngle)
+        if (wallInFront && input.buttons.IsSet(MyButtons.Forward) && currentAngle < controller.maxClimbAngle)
         {
             if (!isClimbing)
             {
