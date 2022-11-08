@@ -8,12 +8,11 @@ enum MyButtons
     Right = 3,
     Jump = 4,
     SpaceReleased = 5,
-    CKeyHolding = 6,
-    LeftShiftHolding = 7,
-    LeftShiftReleased = 8,
-    LeftCtrl = 9,
-    LeftCtrlReleased = 10,
-    Ready = 11
+    LeftShiftHolding = 6,
+    LeftShiftReleased = 7,
+    LeftCtrl = 8,
+    LeftCtrlReleased = 9,
+    Ready = 10
 }
 public struct NetworkInputs : INetworkInput
 {

@@ -14,13 +14,13 @@ public class PlayerCrouch
         rb = controller.GetComponent<Rigidbody>();
     }
 
-    public void CrouchInputs()
+    public void CrouchInputs(NetworkInputs input)
     {
-        if (controller.Inputs.LeftCtrlHolding())
+        if (input.buttons.IsSet(MyButtons.LeftCtrl))
         {
             isCrouching = true;
         }
-        else if (controller.Inputs.LeftCtrlReleased())
+        else if (input.buttons.IsSet(MyButtons.LeftCtrlReleased))
         {
             isCrouching = false;
             controller.transform.localScale = new Vector3(controller.transform.localScale.x, startCrouchScale, controller.transform.localScale.z);

@@ -17,11 +17,11 @@ public class Inputs
     //public float GetVertical() => Input.GetAxis("Vertical");
     //public bool SpacePressed() => keyboard.spaceKey.wasPressedThisFrame;
     //public bool SpaceReleased() => keyboard.spaceKey.wasReleasedThisFrame;
-    public bool CKeyHolding() => keyboard.cKey.isPressed;
+    //public bool CKeyHolding() => keyboard.cKey.isPressed;
     //public bool LeftShiftHolding() => keyboard.leftShiftKey.IsPressed();
     //internal bool LeftShiftReleased() => keyboard.leftShiftKey.wasReleasedThisFrame;
-    public bool LeftCtrlHolding() => keyboard.leftCtrlKey.IsPressed();
-    public bool LeftCtrlReleased() => keyboard.leftCtrlKey.wasReleasedThisFrame;
+    //public bool LeftCtrlHolding() => keyboard.leftCtrlKey.IsPressed();
+    //public bool LeftCtrlReleased() => keyboard.leftCtrlKey.wasReleasedThisFrame;
 
 
     // Mouse

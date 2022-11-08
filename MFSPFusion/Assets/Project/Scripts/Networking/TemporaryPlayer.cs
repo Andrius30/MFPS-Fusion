@@ -1,6 +1,8 @@
+using Andrius.Core.Debuging;
 using Fusion;
-using System;
+using TMPro;
 using UnityEngine;
+using Timer = Andrius.Core.Timers.Timer;
 
 public class TemporaryPlayer : NetworkBehaviour
 {
@@ -9,16 +11,28 @@ public class TemporaryPlayer : NetworkBehaviour
     public Vector3 BottomRightBounds;
     public Vector3 BottomLeftBounds;
 
+
+    [SerializeField] TextMeshProUGUI readyText;
+    [SerializeField] float textShowTime = 1f;
+
     [Networked(OnChanged = nameof(OnChanged), OnChangedTargets = OnChangedTargets.All)]
     public NetworkBool isReady { get; set; }
     [Networked] public NetworkButtons inputs { get; set; }
+
+    Timer textTimer;
+
+    void Start()
+    {
+        textTimer = new Timer(0, OnDoneDisable, false, true);
+        ToggleReadyText(isReady);
+    }
+
 
     public static void OnChanged(Changed<TemporaryPlayer> changed)
     {
         changed.LoadNew();
         var newVal = changed.Behaviour.isReady;
 
-        Debug.Log($"OnChanged called {newVal}");
         if (FusionCallbacks.runner.IsServer)
         {
             if (GameManager.instance.CheckIfPlayersReady())
@@ -35,11 +49,33 @@ public class TemporaryPlayer : NetworkBehaviour
         if (input.buttons.IsSet(MyButtons.Ready))
         {
             isReady = !isReady;
-            Debug.Log($"is ready {isReady}");
+            RPC_SetReady(isReady);
+
         }
     }
 
     void Update()
+    {
+        CheckBounds();
+        if (textTimer == null) return;
+        if (textTimer.IsDone()) return;
+        textTimer.StartTimer();
+    }
+
+    [Rpc(RpcSources.InputAuthority, RpcTargets.All)]
+    public void RPC_SetReady(bool ready)
+    {
+        ToggleReadyText(true);
+        string txt = ready ? "Player is ready!" : "Player is not ready!";
+        Color color = ready ? Color.green : Color.red;
+        SetReadyText(txt, color);
+        textTimer.SetTimer(textShowTime, false);
+    }
+
+    void ToggleReadyText(bool enabled) => readyText.enabled = enabled;
+    void OnDoneDisable() => ToggleReadyText(false);
+    void SetReadyText(string text, Color color) => readyText.text = $"{text}:{color};".Interpolate();
+    void CheckBounds()
     {
         if (transform.position.x >= topRightBounds.x)
         {
@@ -73,11 +109,6 @@ public class TemporaryPlayer : NetworkBehaviour
         {
             transform.position = new Vector3(transform.position.x, transform.position.y, BottomLeftBounds.z);
         }
-
     }
 
-    void OnTriggerEnter(Collider other)
-    {
-        Debug.Log($"Trigger");
-    }
 }

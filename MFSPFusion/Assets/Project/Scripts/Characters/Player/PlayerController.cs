@@ -15,6 +15,8 @@ public class PlayerController : NetworkBehaviour
 
     }
 
+    public Teams playerTeam = Teams.NONE;
+
     #region Move settings
     [FoldoutGroup("Move settings")] public PlayerStates currentState;
     [FoldoutGroup("Move settings"), SerializeField] float playerSpeed;
@@ -159,10 +161,10 @@ public class PlayerController : NetworkBehaviour
         wallRun.WallrunChecks(input);
         wallClimb.ClimbChecks(input);
         playerMove.Sprint(input);
-        playerCrouch.CrouchInputs();
+        playerCrouch.CrouchInputs(input);
         playerCrouch.Crouch();
         playerSlopeMovement.SlopeMove();
-        
+
     }
 
     void OnDrawGizmos()

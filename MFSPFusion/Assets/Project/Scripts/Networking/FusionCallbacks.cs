@@ -17,9 +17,13 @@ public class FusionCallbacks : SimulationBehaviour, INetworkRunnerCallbacks
     [ReadOnly, SerializeField] LevelManager levelManager;
 
     LobbySpawner lobbySpawner;
+    GameplaySpawner gameplaySpawner;
+    PlayerRef localPlayer;
+    Keyboard keyboard;
 
     void Start()
     {
+        keyboard = Keyboard.current;
         levelManager = FindObjectOfType<LevelManager>();
     }
 
@@ -43,11 +47,19 @@ public class FusionCallbacks : SimulationBehaviour, INetworkRunnerCallbacks
         Debug.Log($"Scene loaded successfully");
         if (runner.IsServer)
         {
+            if (SceneManager.GetActiveScene().buildIndex == 3)
+            {
+                var obj = runner.Spawn(playerPrefab, Vector3.zero, Quaternion.identity, localPlayer);
+                GameManager.instance.AddGameplayPlayer(localPlayer, obj);
+            }
         }
     }
 
     public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
     {
+        if (localPlayer == default)
+            localPlayer = player;
+
         if (SceneManager.GetActiveScene().buildIndex == 2)
         {
             if (lobbySpawner == null)
@@ -60,7 +72,7 @@ public class FusionCallbacks : SimulationBehaviour, INetworkRunnerCallbacks
             NetworkObject go = runner.Spawn(lobbyPlayerPrefab, lobbySpawner.GetSpawnPosition(), Quaternion.identity, player, (runner, go) =>
             {
                 var temp = go.GetComponent<TemporaryPlayer>();
-                GameManager.instance.AddPlayer(player, go, temp);
+                GameManager.instance.AddLobbyPlayer(player, go, temp);
 
             });
 
@@ -71,22 +83,26 @@ public class FusionCallbacks : SimulationBehaviour, INetworkRunnerCallbacks
 
     public void OnPlayerLeft(NetworkRunner runner, PlayerRef player)
     {
-
+        GameManager.instance.RemoveGameplayPlayer(player);
+        GameManager.instance.RemoveLobbyPlayer(player);
     }
     public void OnInput(NetworkRunner runner, NetworkInput input)
     {
+
         NetworkInputs networkInput = new NetworkInputs();
 
-        networkInput.buttons.Set(MyButtons.Forward, Input.GetKey(KeyCode.W));
-        networkInput.buttons.Set(MyButtons.Backward, Input.GetKey(KeyCode.S));
-        networkInput.buttons.Set(MyButtons.Right, Input.GetKey(KeyCode.D));
-        networkInput.buttons.Set(MyButtons.Left, Input.GetKey(KeyCode.A));
-        networkInput.buttons.Set(MyButtons.Jump, Input.GetKey(KeyCode.Space));
-        networkInput.buttons.Set(MyButtons.SpaceReleased, Input.GetKeyUp(KeyCode.Space));
+        networkInput.buttons.Set(MyButtons.Forward, keyboard.wKey.IsPressed());
+        networkInput.buttons.Set(MyButtons.Backward, keyboard.sKey.IsPressed());
+        networkInput.buttons.Set(MyButtons.Right, keyboard.dKey.IsPressed());
+        networkInput.buttons.Set(MyButtons.Left, keyboard.aKey.IsPressed());
+        networkInput.buttons.Set(MyButtons.Jump, keyboard.spaceKey.isPressed);
+        networkInput.buttons.Set(MyButtons.SpaceReleased, keyboard.spaceKey.wasReleasedThisFrame);
+        networkInput.buttons.Set(MyButtons.LeftCtrl, keyboard.leftCtrlKey.isPressed);
+        networkInput.buttons.Set(MyButtons.LeftCtrlReleased, keyboard.leftCtrlKey.wasReleasedThisFrame);
 
         networkInput.mousex = Input.GetAxisRaw("Mouse X");
         networkInput.mousey = Input.GetAxisRaw("Mouse Y");
-        
+
         networkInput.buttons.Set(MyButtons.Ready, Keyboard.current.rKey.wasPressedThisFrame);
 
         input.Set(networkInput);
