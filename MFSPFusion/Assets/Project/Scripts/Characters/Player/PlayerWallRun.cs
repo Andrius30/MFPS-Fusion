@@ -28,8 +28,8 @@ public class PlayerWallRun
 
     void Check()
     {
-        controller.wallLeft = Physics.Raycast(controller.transform.position, -controller.cameraPosTransform.right, out controller.leftWallHit, controller.wallCheckDistance, controller.wallMask);
-        controller.wallRight = Physics.Raycast(controller.transform.position, controller.cameraPosTransform.right, out controller.rightWallHit, controller.wallCheckDistance, controller.wallMask);
+        controller.wallLeft = Physics.Raycast(controller.transform.position, -controller.cameraTransform.right, out controller.leftWallHit, controller.wallCheckDistance, controller.wallMask);
+        controller.wallRight = Physics.Raycast(controller.transform.position, controller.cameraTransform.right, out controller.rightWallHit, controller.wallCheckDistance, controller.wallMask);
     }
     void StateMachine(NetworkInputs input)
     {
@@ -59,7 +59,7 @@ public class PlayerWallRun
         wallNormal = controller.wallRight ? controller.rightWallHit.normal : controller.leftWallHit.normal;
         Vector3 wallForward = Vector3.Cross(wallNormal, controller.transform.up);
 
-        if ((controller.cameraPosTransform.forward - wallForward).magnitude > (controller.cameraPosTransform.forward - -wallForward).magnitude)
+        if ((controller.cameraTransform.forward - wallForward).magnitude > (controller.cameraTransform.forward - -wallForward).magnitude)
         {
             wallForward = -wallForward;
         }
@@ -82,8 +82,8 @@ public class PlayerWallRun
     public void Visualize()
     {
         Gizmos.color = Color.yellow;
-        Gizmos.DrawLine(controller.transform.position, controller.transform.position + -controller.cameraPosTransform.right * controller.wallCheckDistance);
-        Gizmos.DrawLine(controller.transform.position, controller.transform.position + controller.cameraPosTransform.right * controller.wallCheckDistance);
+        Gizmos.DrawLine(controller.transform.position, controller.transform.position + -controller.cameraTransform.right * controller.wallCheckDistance);
+        Gizmos.DrawLine(controller.transform.position, controller.transform.position + controller.cameraTransform.right * controller.wallCheckDistance);
 
     }
 }

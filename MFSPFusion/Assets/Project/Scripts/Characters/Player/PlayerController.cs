@@ -1,6 +1,7 @@
 using Fusion;
 using Sirenix.OdinInspector;
 using UnityEngine;
+using UnityEngine.InputSystem.XR;
 
 public class PlayerController : NetworkBehaviour
 {
@@ -27,7 +28,7 @@ public class PlayerController : NetworkBehaviour
     [FoldoutGroup("Move settings")] public float slopeSpeed;
     [FoldoutGroup("Move settings")] public float slopeCheckDistance = 0.7f;
     [FoldoutGroup("Move settings"), SerializeField] float mouseSensitivity;
-    [FoldoutGroup("Move settings")] public Transform cameraPosTransform;
+    [FoldoutGroup("Move settings")] public Transform cameraTransform;
     [FoldoutGroup("Move settings")] public bool exitingSlope = false;
     #endregion
 
@@ -61,19 +62,6 @@ public class PlayerController : NetworkBehaviour
     #endregion
 
     #region Getters
-    public Inputs Inputs
-    {
-        get
-        {
-            if (inputs == null)
-            {
-                inputs = new Inputs();
-                inputs.Init();
-            }
-
-            return inputs;
-        }
-    }
     public float MouseSensitivity => mouseSensitivity;
 
     #endregion
@@ -97,6 +85,10 @@ public class PlayerController : NetworkBehaviour
 
     #endregion
 
+    [HideInInspector] public bool isCrouching = false;
+    [HideInInspector] public bool isSprinting = false;
+    [HideInInspector] public bool isClimbing = false;
+
     void Awake()
     {
         playerModel = new PlayerModel(this);
@@ -108,11 +100,14 @@ public class PlayerController : NetworkBehaviour
         playerCrouch = new PlayerCrouch(this);
         playerSlopeMovement = new PlayerSlopeMovement(this);
 
-        CameraController.onTargetSpawn?.Invoke(cameraPosTransform);
-        ChangeState(PlayerStates.NORMAL);
     }
     void Start()
     {
+        if (Object.HasInputAuthority)
+        {
+            //CameraController.onTargetSpawn?.Invoke(cameraPosTransform);
+            ChangeState(PlayerStates.NORMAL);
+        }
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }
@@ -151,12 +146,17 @@ public class PlayerController : NetworkBehaviour
         }
     }
 
+    void Update()
+    {
+        if (Object.HasInputAuthority)
+            playerModel.RotatePlayer();
+    }
+
     public override void FixedUpdateNetwork()
     {
         if (GetInput<NetworkInputs>(out var input) == false) return;
 
         ChangeSpeedBasedOnState(input);
-        playerModel.RotatePlayer(input);
         playerJump.Jump(input);
         wallRun.WallrunChecks(input);
         wallClimb.ClimbChecks(input);
@@ -165,6 +165,10 @@ public class PlayerController : NetworkBehaviour
         playerCrouch.Crouch();
         playerSlopeMovement.SlopeMove();
 
+        if (!isCrouching && !isSprinting && !isClimbing && !wallRunning)
+        {
+            ChangeState(PlayerStates.NORMAL);
+        }
     }
 
     void OnDrawGizmos()

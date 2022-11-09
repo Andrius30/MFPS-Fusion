@@ -10,7 +10,6 @@ public class PlayerClimb
     RaycastHit hit;
     Rigidbody rb;
     float currentAngle;
-    bool isClimbing = false;
 
     public PlayerClimb(PlayerController controller)
     {
@@ -24,37 +23,38 @@ public class PlayerClimb
         CheckAngle();
         if (wallInFront && input.buttons.IsSet(MyButtons.Forward) && currentAngle < controller.maxClimbAngle)
         {
-            if (!isClimbing)
+            if (!controller.isClimbing)
             {
+                controller.isClimbing = true;
                 controller.ChangeState(PlayerController.PlayerStates.WALL_CLIMB);
             }
         }
         else
         {
-            if (isClimbing) StopClimbing();
+            if (controller.isClimbing) StopClimbing();
         }
     }
     public void Climb(NetworkInputs input)
     {
-        if (wallInFront && input.buttons.IsSet(MyButtons.Forward) && currentAngle < controller.maxClimbAngle)
-        {
-            if (!isClimbing)
-            {
-                StartClimbing();
-            }
-        }
-        if (isClimbing)
+        //if (wallInFront && input.buttons.IsSet(MyButtons.Forward) && currentAngle < controller.maxClimbAngle)
+        //{
+        //    if (!controller.isClimbing)
+        //    {
+        //        StartClimbing();
+        //    }
+        //}
+        if (controller.isClimbing)
         {
             ClimbMovement();
         }
     }
 
-    void Check() => wallInFront = Physics.SphereCast(controller.transform.position, controller.wallClimbCheckRadius, controller.cameraPosTransform.forward, out hit, controller.wallClimbDetectionLength, controller.wallMask);
-    void CheckAngle() => currentAngle = Vector3.Angle(controller.cameraPosTransform.forward, -hit.normal);
-    void StartClimbing()
-    {
-        isClimbing = true;
-    }
+    void Check() => wallInFront = Physics.SphereCast(controller.transform.position, controller.wallClimbCheckRadius, controller.cameraTransform.forward, out hit, controller.wallClimbDetectionLength, controller.wallMask);
+    void CheckAngle() => currentAngle = Vector3.Angle(controller.cameraTransform.forward, -hit.normal);
+    //void StartClimbing()
+    //{
+    //    controller.isClimbing = true;
+    //}
     void ClimbMovement()
     {
         rb.velocity = new Vector3(rb.velocity.x, controller.wallClimbSpeed, rb.velocity.z);
@@ -62,13 +62,13 @@ public class PlayerClimb
     }
     void StopClimbing()
     {
-        isClimbing = false;
+        controller.isClimbing = false;
         controller.ChangeState(PlayerController.PlayerStates.NORMAL);
     }
     public void Visualize()
     {
         Gizmos.color = Color.green;
-        Gizmos.DrawLine(controller.cameraPosTransform.position, (controller.cameraPosTransform.position + controller.cameraPosTransform.forward) * controller.wallClimbDetectionLength);
-        Gizmos.DrawWireSphere((controller.cameraPosTransform.position + controller.cameraPosTransform.forward) * controller.wallClimbDetectionLength, controller.wallClimbCheckRadius);
+        Gizmos.DrawLine(controller.cameraTransform.position, (controller.cameraTransform.position + controller.cameraTransform.forward) * controller.wallClimbDetectionLength);
+        Gizmos.DrawWireSphere((controller.cameraTransform.position + controller.cameraTransform.forward) * controller.wallClimbDetectionLength, controller.wallClimbCheckRadius);
     }
 }

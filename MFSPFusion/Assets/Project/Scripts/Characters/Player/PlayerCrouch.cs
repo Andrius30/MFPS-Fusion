@@ -5,7 +5,7 @@ public class PlayerCrouch
     PlayerController controller;
     Rigidbody rb;
     float startCrouchScale;
-    bool isCrouching = false;
+
 
     public PlayerCrouch(PlayerController controller)
     {
@@ -18,20 +18,20 @@ public class PlayerCrouch
     {
         if (input.buttons.IsSet(MyButtons.LeftCtrl))
         {
-            isCrouching = true;
+            controller.isCrouching = true;
         }
-        else if (input.buttons.IsSet(MyButtons.LeftCtrlReleased))
+        else
         {
-            isCrouching = false;
+            controller.isCrouching = false;
             controller.transform.localScale = new Vector3(controller.transform.localScale.x, startCrouchScale, controller.transform.localScale.z);
-            controller.ChangeState(PlayerController.PlayerStates.NORMAL);
+            //controller.ChangeState(PlayerController.PlayerStates.NORMAL);
         }
     }
     public void Crouch() => ScaleByHalf();
 
     void ScaleByHalf()
     {
-        if (!isCrouching) return;
+        if (!controller.isCrouching) return;
         controller.transform.localScale = new Vector3(controller.transform.localScale.x, controller.playerCrouchScale, controller.transform.localScale.z);
         rb.AddForce(Vector3.down * 5f, ForceMode.Impulse);
         controller.ChangeState(PlayerController.PlayerStates.CROUCH);

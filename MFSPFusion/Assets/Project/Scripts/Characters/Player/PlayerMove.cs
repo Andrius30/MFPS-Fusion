@@ -33,11 +33,16 @@ public class PlayerMove
     {
         if (input.buttons.IsSet(MyButtons.LeftShiftHolding) && input.buttons.IsSet(MyButtons.Forward))
         {
+            controller.isSprinting = true;
             controller.ChangeState(PlayerController.PlayerStates.SPRINT);
         }
-        else if (input.buttons.IsSet(MyButtons.LeftShiftReleased))
+        else
         {
-            controller.ChangeState(PlayerController.PlayerStates.NORMAL);
+            controller.isSprinting = false;
         }
+        //else if(input.buttons.IsSet(MyButtons.LeftShiftReleased))
+        //{
+        //    controller.ChangeState(PlayerController.PlayerStates.NORMAL);
+        //}
     }
 }

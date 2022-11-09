@@ -9,14 +9,15 @@ enum MyButtons
     Jump = 4,
     SpaceReleased = 5,
     LeftShiftHolding = 6,
-    LeftShiftReleased = 7,
-    LeftCtrl = 8,
-    LeftCtrlReleased = 9,
-    Ready = 10
+    LeftCtrl = 7,
+    Ready = 8
+    //LeftShiftReleased = 7,
+    //LeftCtrlReleased = 9,
 }
 public struct NetworkInputs : INetworkInput
 {
     public NetworkButtons buttons;
     public float mousex;
     public float mousey;
+    public bool leftCtrlReleased;
 }

@@ -1,3 +1,4 @@
+using Fusion;
 using System;
 using UnityEngine;
 
@@ -6,11 +7,12 @@ public class CameraController : MonoBehaviour
     public static Action<Transform> onTargetSpawn;
 
     Transform target;
-
-    void LateUpdate()
+    public void Update()
     {
+        if (target == null) return;
         transform.position = target.position;
         transform.rotation = target.rotation;
+
     }
 
     void SetTarget(Transform target) => this.target = target;
