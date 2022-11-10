@@ -26,12 +26,12 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1799836372}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0.362}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.60300004, z: 0.36200005}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1116383843913381769}
+  m_Father: {fileID: 1116383842884122556}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!20 &1799836374
@@ -148,7 +148,7 @@ Transform:
   m_Children:
   - {fileID: 1116383843519473492}
   m_Father: {fileID: 1116383842884122556}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1116383842884122497
 GameObject:
@@ -164,7 +164,7 @@ GameObject:
   - component: {fileID: 1116383842884122557}
   - component: {fileID: -172637552925719393}
   - component: {fileID: 7887703906495386636}
-  - component: {fileID: 301036579618512204}
+  - component: {fileID: -4564029731232994041}
   m_Layer: 0
   m_Name: LobbyPlayer
   m_TagString: Untagged
@@ -179,18 +179,19 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1116383842884122497}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.71, y: 1.11, z: -15.03}
+  m_LocalRotation: {x: -0, y: -0.0024516063, z: -0, w: 0.9999971}
+  m_LocalPosition: {x: 2.7117753, y: 1.11, z: -15.029994}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 1799836375}
   - {fileID: 1116383842816820180}
   - {fileID: 1116383843913381769}
   - {fileID: 1116383843847007673}
   - {fileID: 4018614309054972916}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -0.281, z: 0}
 --- !u!136 &1116383842884122499
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -295,7 +296,7 @@ MonoBehaviour:
   NetworkedBehaviours:
   - {fileID: 1116383842884122557}
   - {fileID: 7887703906495386636}
-  - {fileID: 301036579618512204}
+  - {fileID: -4564029731232994041}
   SimulationBehaviours: []
 --- !u!114 &7887703906495386636
 MonoBehaviour:
@@ -318,7 +319,7 @@ MonoBehaviour:
   textShowTime: 1
   _isReady:
     _value: 0
---- !u!114 &301036579618512204
+--- !u!114 &-4564029731232994041
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -327,10 +328,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1116383842884122497}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 1710889294, guid: e725a070cec140c4caffb81624c8c787, type: 3}
+  m_Script: {fileID: 158639473, guid: e725a070cec140c4caffb81624c8c787, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _interpolationDataSource: 0
+  _interpolationDataSource: 3
   InterpolationSpace: 0
   InterpolationTarget: {fileID: 1116383843519473492}
   InterpolateErrorCorrection: 1
@@ -459,7 +460,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1116383842884122556}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1116383843913381768
 GameObject:
@@ -476,7 +477,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1116383843913381769
 Transform:
   m_ObjectHideFlags: 0
@@ -488,10 +489,9 @@ Transform:
   m_LocalPosition: {x: 0, y: 0.603, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 1799836375}
+  m_Children: []
   m_Father: {fileID: 1116383842884122556}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4554079176114871084
 GameObject:
@@ -525,7 +525,7 @@ RectTransform:
   m_Children:
   - {fileID: 7604885987109771141}
   m_Father: {fileID: 1116383842884122556}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 60.6, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}

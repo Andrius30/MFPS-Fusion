@@ -105,8 +105,12 @@ public class PlayerController : NetworkBehaviour
     {
         if (Object.HasInputAuthority)
         {
-            //CameraController.onTargetSpawn?.Invoke(cameraPosTransform);
+            //CameraController.onTargetSpawn?.Invoke(cameraTransform);
             ChangeState(PlayerStates.NORMAL);
+        }
+        else
+        {
+            cameraTransform.gameObject.SetActive(false);
         }
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
@@ -146,17 +150,12 @@ public class PlayerController : NetworkBehaviour
         }
     }
 
-    void Update()
-    {
-        if (Object.HasInputAuthority)
-            playerModel.RotatePlayer();
-    }
-
     public override void FixedUpdateNetwork()
     {
         if (GetInput<NetworkInputs>(out var input) == false) return;
 
         ChangeSpeedBasedOnState(input);
+        playerModel.RotatePlayer(input);
         playerJump.Jump(input);
         wallRun.WallrunChecks(input);
         wallClimb.ClimbChecks(input);

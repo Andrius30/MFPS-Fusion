@@ -61,8 +61,7 @@ public class FusionCallbacks : SimulationBehaviour, INetworkRunnerCallbacks
     NetworkInputs networkInput = new NetworkInputs();
     void Update()
     {
-        networkInput.mousex = Input.GetAxis("Mouse X");
-        networkInput.mousey = Input.GetAxis("Mouse Y");
+
         if (keyboard.spaceKey.wasReleasedThisFrame)
             networkInput.buttons.Set(MyButtons.SpaceReleased, true);
         if (keyboard.rKey.wasPressedThisFrame)
@@ -77,6 +76,10 @@ public class FusionCallbacks : SimulationBehaviour, INetworkRunnerCallbacks
         networkInput.buttons.Set(MyButtons.Jump, keyboard.spaceKey.isPressed);
         networkInput.buttons.Set(MyButtons.LeftShiftHolding, keyboard.leftShiftKey.isPressed);
         networkInput.buttons.Set(MyButtons.LeftCtrl, keyboard.leftCtrlKey.isPressed);
+
+
+        networkInput.mousex = Input.GetAxisRaw("Mouse X");
+        networkInput.mousey = Input.GetAxisRaw("Mouse Y") * -1;
 
         input.Set(networkInput);
         networkInput = default;
