@@ -8,6 +8,15 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
+public enum ConnectionStatus
+{
+    Disconnected,
+    Connecting,
+    Failed,
+    Connected,
+    Loading,
+    Loaded
+}
 public class FusionCallbacks : SimulationBehaviour, INetworkRunnerCallbacks
 {
     public static NetworkRunner runner;
@@ -15,20 +24,54 @@ public class FusionCallbacks : SimulationBehaviour, INetworkRunnerCallbacks
     public GameObject playerPrefab;
 
     [ReadOnly, SerializeField] LevelManager levelManager;
+    [SerializeField] ConnectionStatus status = ConnectionStatus.Disconnected;
 
     LobbySpawner lobbySpawner;
     GameplaySpawner gameplaySpawner;
     PlayerRef localPlayer;
     Keyboard keyboard;
+    NetworkInputs networkInput = new NetworkInputs();
 
     void Start()
     {
         keyboard = Keyboard.current;
         levelManager = FindObjectOfType<LevelManager>();
     }
+    void Update()
+    {
 
+        if (keyboard.spaceKey.wasReleasedThisFrame)
+            networkInput.buttons.Set(MyButtons.SpaceReleased, true);
+        if (keyboard.rKey.wasPressedThisFrame)
+            networkInput.buttons.Set(MyButtons.Ready, true);
+        if (keyboard.spaceKey.wasPressedThisFrame)
+            networkInput.buttons.Set(MyButtons.Jump, true);
+    }
+
+    public void SetConnectionStatus(ConnectionStatus status)
+    {
+        switch (status)
+        {
+            case ConnectionStatus.Disconnected:
+                LoadingScreen.onShowLoadingScreen?.Invoke(true, "Disconnected");
+                break;
+            case ConnectionStatus.Connecting:
+                LoadingScreen.onShowLoadingScreen?.Invoke(true, "Connecting...");
+                break;
+            case ConnectionStatus.Connected:
+                LoadingScreen.onShowLoadingScreen?.Invoke(false, "");
+                break;
+            case ConnectionStatus.Loading:
+                LoadingScreen.onShowLoadingScreen?.Invoke(true, "Loading...");
+                break;
+            case ConnectionStatus.Loaded:
+                LoadingScreen.onShowLoadingScreen?.Invoke(false, "");
+                break;
+        }
+    }
     public async void Launch()
     {
+        SetConnectionStatus(ConnectionStatus.Connecting);
         runner = gameObject.AddComponent<NetworkRunner>();
         runner.ProvideInput = true;
 
@@ -41,9 +84,11 @@ public class FusionCallbacks : SimulationBehaviour, INetworkRunnerCallbacks
             PlayerCount = 2, // FIXME: Should be 10 at release
             SceneManager = levelManager
         });
+        SetConnectionStatus(ConnectionStatus.Connected);
     }
     public void OnSceneLoadDone(NetworkRunner runner)
     {
+        SetConnectionStatus(ConnectionStatus.Loaded);
         if (SceneManager.GetActiveScene().buildIndex == 3)
         {
             CreateGameplayPlayer(runner);
@@ -58,22 +103,12 @@ public class FusionCallbacks : SimulationBehaviour, INetworkRunnerCallbacks
     {
 
     }
-    NetworkInputs networkInput = new NetworkInputs();
-    void Update()
-    {
-
-        if (keyboard.spaceKey.wasReleasedThisFrame)
-            networkInput.buttons.Set(MyButtons.SpaceReleased, true);
-        if (keyboard.rKey.wasPressedThisFrame)
-            networkInput.buttons.Set(MyButtons.Ready, true);
-    }
     public void OnInput(NetworkRunner runner, NetworkInput input)
     {
         networkInput.buttons.Set(MyButtons.Forward, keyboard.wKey.IsPressed());
         networkInput.buttons.Set(MyButtons.Backward, keyboard.sKey.IsPressed());
         networkInput.buttons.Set(MyButtons.Right, keyboard.dKey.IsPressed());
         networkInput.buttons.Set(MyButtons.Left, keyboard.aKey.IsPressed());
-        networkInput.buttons.Set(MyButtons.Jump, keyboard.spaceKey.isPressed);
         networkInput.buttons.Set(MyButtons.LeftShiftHolding, keyboard.leftShiftKey.isPressed);
         networkInput.buttons.Set(MyButtons.LeftCtrl, keyboard.leftCtrlKey.isPressed);
 
@@ -84,6 +119,7 @@ public class FusionCallbacks : SimulationBehaviour, INetworkRunnerCallbacks
         input.Set(networkInput);
         networkInput = default;
     }
+    public void OnSceneLoadStart(NetworkRunner runner) => SetConnectionStatus(ConnectionStatus.Loading);
 
     public void OnConnectedToServer(NetworkRunner runner) { }
     public void OnConnectFailed(NetworkRunner runner, NetAddress remoteAddress, NetConnectFailedReason reason) { }
@@ -93,7 +129,6 @@ public class FusionCallbacks : SimulationBehaviour, INetworkRunnerCallbacks
     public void OnInputMissing(NetworkRunner runner, PlayerRef player, NetworkInput input) { }
     public void OnHostMigration(NetworkRunner runner, HostMigrationToken hostMigrationToken) { }
     public void OnReliableDataReceived(NetworkRunner runner, PlayerRef player, ArraySegment<byte> data) { }
-    public void OnSceneLoadStart(NetworkRunner runner) { }
     public void OnSessionListUpdated(NetworkRunner runner, List<SessionInfo> sessionList) { }
     public void OnShutdown(NetworkRunner runner, ShutdownReason shutdownReason) { }
     public void OnUserSimulationMessage(NetworkRunner runner, SimulationMessagePtr message) { }
@@ -119,9 +154,6 @@ public class FusionCallbacks : SimulationBehaviour, INetworkRunnerCallbacks
             });
         }
     }
-
-
-
     void CreateGameplayPlayer(NetworkRunner runner)
     {
         if (SceneManager.GetActiveScene().buildIndex == 3)
