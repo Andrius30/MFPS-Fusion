@@ -81,7 +81,7 @@ public class FusionCallbacks : SimulationBehaviour, INetworkRunnerCallbacks
         {
             GameMode = GameMode.AutoHostOrClient,
             SessionName = "",
-            PlayerCount = 2, // FIXME: Should be 10 at release
+            PlayerCount = 10, 
             SceneManager = levelManager
         });
         SetConnectionStatus(ConnectionStatus.Connected);
