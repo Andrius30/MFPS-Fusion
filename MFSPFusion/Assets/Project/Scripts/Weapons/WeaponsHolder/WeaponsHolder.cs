@@ -15,6 +15,7 @@ public class WeaponsHolder : NetworkBehaviour
 
     void Update()
     {
+        if (Object == null) return;
         if (!Object.HasInputAuthority) return;
         if (weaponsList.Count <= 0) return;
         float wheel = Input.GetAxis("Mouse ScrollWheel");

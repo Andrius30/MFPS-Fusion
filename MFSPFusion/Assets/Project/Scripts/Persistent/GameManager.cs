@@ -1,5 +1,6 @@
 using Fusion;
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 [Serializable]
@@ -19,6 +20,9 @@ public enum Teams
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
+
+    public List<PlayerController> redTeam = new List<PlayerController>();
+    public List<PlayerController> blueTeam = new List<PlayerController>();
 
     void Awake()
     {

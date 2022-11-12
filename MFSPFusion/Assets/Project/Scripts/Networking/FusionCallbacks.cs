@@ -81,7 +81,7 @@ public class FusionCallbacks : SimulationBehaviour, INetworkRunnerCallbacks
         {
             GameMode = GameMode.AutoHostOrClient,
             SessionName = "",
-            PlayerCount = 10, 
+            PlayerCount = 10,
             SceneManager = levelManager
         });
         SetConnectionStatus(ConnectionStatus.Connected);
@@ -150,6 +150,21 @@ public class FusionCallbacks : SimulationBehaviour, INetworkRunnerCallbacks
             NetworkObject go = runner.Spawn(lobbyPlayerPrefab, lobbySpawner.GetSpawnPosition(), Quaternion.identity, player, (runner, go) =>
             {
                 var temp = go.GetComponent<TemporaryPlayer>();
+                var playerController = go.GetComponent<PlayerController>();
+                playerController.thisPlayer = player;
+                if (GameManager.instance.redTeam.Count <= GameManager.instance.blueTeam.Count)
+                {
+                    playerController.playerData.SaveTeam(player, Teams.Red);
+                    playerController.playerTeam = Teams.Red;
+                    GameManager.instance.redTeam.Add(playerController);
+                }
+                else
+                {
+                    playerController.playerData.SaveTeam(player, Teams.Blue);
+                    playerController.playerTeam = Teams.Blue;
+                    GameManager.instance.blueTeam.Add(playerController);
+                }
+
                 GameLauncher.AddPlayer(player, go);
             });
         }
@@ -158,13 +173,17 @@ public class FusionCallbacks : SimulationBehaviour, INetworkRunnerCallbacks
     {
         if (SceneManager.GetActiveScene().buildIndex == 3)
         {
+            var spawner = FindObjectOfType<GameplaySpawner>();
             var sortedList = GameLauncher.joinedPlayers.OrderBy(x => x.PlayerRef.PlayerId);
             foreach (var player in sortedList)
             {
-                Debug.Log($"Spaning {player.PlayerRef.PlayerId}");
-                var spawnPos = new Vector3(0, 1.11f, 0);
-                var obj = runner.Spawn(playerPrefab, spawnPos, Quaternion.identity, player.PlayerRef);
+                var obj = runner.Spawn(playerPrefab, Vector3.zero, Quaternion.identity, player.PlayerRef);
+                var playerController = obj.GetComponent<PlayerController>();
+                playerController.playerTeam = playerController.playerData.GetTeam(player.PlayerRef);
+                playerController.thisPlayer = player.PlayerRef;
+                obj.transform.position = spawner.GetSpawnPosition(playerController.playerTeam);
             }
+            GameLauncher.joinedPlayers.Clear();
         }
     }
 

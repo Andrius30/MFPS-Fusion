@@ -1,7 +1,10 @@
 using Fusion;
 using Sirenix.OdinInspector;
+using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem.XR;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : NetworkBehaviour
 {
@@ -16,7 +19,8 @@ public class PlayerController : NetworkBehaviour
 
     }
 
-    public Teams playerTeam = Teams.NONE;
+    [Networked] public Teams playerTeam { get; set; }
+    public PlayerRef thisPlayer;
 
     #region Move settings
     [FoldoutGroup("Move settings")] public PlayerStates currentState;
@@ -76,6 +80,7 @@ public class PlayerController : NetworkBehaviour
 
     #region Class objects
     PlayerModel playerModel;
+    [HideInInspector] public PlayerData playerData;
     PlayerMove playerMove;
     Inputs inputs;
     PlayerJump playerJump;
@@ -93,6 +98,7 @@ public class PlayerController : NetworkBehaviour
     void Awake()
     {
         playerModel = new PlayerModel(this);
+        playerData = new PlayerData();
         playerMove = new PlayerMove(this);
         groundCheck = new GroundCheck(groundCheckTransform, groundCheckRadius, groundMask);
         playerJump = new PlayerJump(this);
@@ -113,8 +119,11 @@ public class PlayerController : NetworkBehaviour
         {
             cameraTransform.gameObject.SetActive(false);
         }
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
+        if (SceneManager.GetActiveScene().buildIndex == 3)
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+        }
     }
     public void ChangeState(PlayerStates newState)
     {
