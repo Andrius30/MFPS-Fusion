@@ -1,9 +1,6 @@
 using Fusion;
 using Sirenix.OdinInspector;
-using System;
-using System.Collections;
 using UnityEngine;
-using UnityEngine.InputSystem.XR;
 using UnityEngine.SceneManagement;
 
 public class PlayerController : NetworkBehaviour
@@ -76,6 +73,9 @@ public class PlayerController : NetworkBehaviour
     [ReadOnly] public float currentSpeed;
     [HideInInspector] public GroundCheck groundCheck;
     [HideInInspector] public Vector3 moveDirection;
+    [HideInInspector] public bool isCrouching = false;
+    [HideInInspector] public bool isSprinting = false;
+    [HideInInspector] public bool isClimbing = false;
     #endregion
 
     #region Class objects
@@ -91,9 +91,6 @@ public class PlayerController : NetworkBehaviour
 
     #endregion
 
-    [HideInInspector] public bool isCrouching = false;
-    [HideInInspector] public bool isSprinting = false;
-    [HideInInspector] public bool isClimbing = false;
 
     void Awake()
     {
@@ -112,24 +109,40 @@ public class PlayerController : NetworkBehaviour
     {
         if (Object.HasInputAuthority)
         {
-            //CameraController.onTargetSpawn?.Invoke(cameraTransform);
             ChangeState(PlayerStates.NORMAL);
         }
         else
         {
             cameraTransform.gameObject.SetActive(false);
         }
-        if (SceneManager.GetActiveScene().buildIndex == 3)
-        {
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
-        }
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
     }
+
     public void ChangeState(PlayerStates newState)
     {
         if (newState != currentState)
         {
             currentState = newState;
+        }
+    }
+    public override void FixedUpdateNetwork()
+    {
+        if (GetInput<NetworkInputs>(out var input) == false) return;
+
+        ChangeSpeedBasedOnState(input);
+        playerModel.RotatePlayer(input);
+        playerJump.Jump(input);
+        wallRun.WallrunChecks(input);
+        wallClimb.ClimbChecks(input);
+        playerMove.Sprint(input);
+        playerCrouch.CrouchInputs(input);
+        playerCrouch.Crouch();
+        playerSlopeMovement.SlopeMove();
+
+        if (!isCrouching && !isSprinting && !isClimbing && !wallRunning)
+        {
+            ChangeState(PlayerStates.NORMAL);
         }
     }
 
@@ -160,26 +173,7 @@ public class PlayerController : NetworkBehaviour
         }
     }
 
-    public override void FixedUpdateNetwork()
-    {
-        if (GetInput<NetworkInputs>(out var input) == false) return;
-
-        ChangeSpeedBasedOnState(input);
-        playerModel.RotatePlayer(input);
-        playerJump.Jump(input);
-        wallRun.WallrunChecks(input);
-        wallClimb.ClimbChecks(input);
-        playerMove.Sprint(input);
-        playerCrouch.CrouchInputs(input);
-        playerCrouch.Crouch();
-        playerSlopeMovement.SlopeMove();
-
-        if (!isCrouching && !isSprinting && !isClimbing && !wallRunning)
-        {
-            ChangeState(PlayerStates.NORMAL);
-        }
-    }
-
+#if UNITY_EDITOR
     void OnDrawGizmos()
     {
         if (groundCheck == null) return;
@@ -188,7 +182,7 @@ public class PlayerController : NetworkBehaviour
         wallClimb.Visualize();
         playerSlopeMovement.Visualize();
     }
-
+#endif
 
 
 }

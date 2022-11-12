@@ -97,3 +97,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: 03bdc06dda4d21944a357d11c9949ebf, type: 2}
+  maxAmmoAmount: 21
+  amoAmount: 7

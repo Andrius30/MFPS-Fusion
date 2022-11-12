@@ -1,3 +1,4 @@
+using Sirenix.OdinInspector;
 using System;
 using UnityEngine;
 
@@ -16,4 +17,10 @@ public class WeaponData : ScriptableObject
 
     public string weaponName;
     public ShootType shootType = ShootType.Raycast;
+
+    [ShowIf("shootType", ShootType.Rigidbody)]
+    public Rigidbody projectilePrefab;
+    [ShowIf("shootType", ShootType.Rigidbody)]
+    public float projectileSpeed;
+
 }
