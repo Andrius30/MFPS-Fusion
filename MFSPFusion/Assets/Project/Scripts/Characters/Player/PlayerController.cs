@@ -29,6 +29,7 @@ public class PlayerController : NetworkBehaviour
     [FoldoutGroup("Move settings")] public float slopeCheckDistance = 0.7f;
     [FoldoutGroup("Move settings"), SerializeField] float mouseSensitivity;
     [FoldoutGroup("Move settings")] public Transform cameraTransform;
+    [FoldoutGroup("Move settings")] public Transform playerhandTransform;
     [FoldoutGroup("Move settings")] public bool exitingSlope = false;
     #endregion
 

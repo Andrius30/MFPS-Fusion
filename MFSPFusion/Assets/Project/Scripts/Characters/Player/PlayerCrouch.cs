@@ -1,3 +1,4 @@
+using Fusion;
 using UnityEngine;
 
 public class PlayerCrouch
@@ -27,9 +28,10 @@ public class PlayerCrouch
             //controller.ChangeState(PlayerController.PlayerStates.NORMAL);
         }
     }
-    public void Crouch() => ScaleByHalf();
+    public void Crouch() => RPC_ScaleByHalf();
 
-    void ScaleByHalf()
+    [Rpc(RpcSources.InputAuthority, RpcTargets.All, InvokeLocal = true)]
+    public void RPC_ScaleByHalf()
     {
         if (!controller.isCrouching) return;
         controller.transform.localScale = new Vector3(controller.transform.localScale.x, controller.playerCrouchScale, controller.transform.localScale.z);

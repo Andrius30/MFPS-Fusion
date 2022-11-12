@@ -40,6 +40,6 @@ public class GameManager : MonoBehaviour
         }
         //if (count >= 2)
         //    return true;
-        return true; // FIXMEL false
+        return true; // FIXME: false
     }
 }

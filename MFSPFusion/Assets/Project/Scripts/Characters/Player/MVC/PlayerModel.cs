@@ -22,6 +22,7 @@ public class PlayerModel
         xRotation = Mathf.Clamp(xRotation, -90f, 90f);
 
         controller.cameraTransform.localRotation = Quaternion.Euler(xRotation, 0, 0);
+        controller.playerhandTransform.localRotation = Quaternion.Euler(xRotation, 0, 0);
         controller.transform.Rotate(0, yRotation, 0);
 
     }
