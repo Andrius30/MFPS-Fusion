@@ -16,6 +16,9 @@ public class WeaponData : ScriptableObject
     public Quaternion weaponRotationAthand;
 
     public string weaponName;
+    public float cooldown;
+    public float weaponRange;
+    public LayerMask weaponMask;
     public ShootType shootType = ShootType.Raycast;
 
     [ShowIf("shootType", ShootType.Rigidbody)]

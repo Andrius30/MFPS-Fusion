@@ -7,7 +7,7 @@ public class Rifle : BaseGun
 
     public override void Attack()
     {
-        throw new System.NotImplementedException();
+        Debug.Log($"Rifle attack Not implemented");
     }
 
     public override void Reload()

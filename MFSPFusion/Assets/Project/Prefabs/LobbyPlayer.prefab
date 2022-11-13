@@ -165,6 +165,7 @@ GameObject:
   - component: {fileID: -172637552925719393}
   - component: {fileID: 7887703906495386636}
   - component: {fileID: 6686403669321188537}
+  - component: {fileID: 7982928768142140426}
   m_Layer: 0
   m_Name: LobbyPlayer
   m_TagString: Untagged
@@ -231,7 +232,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _interpolationDataSource: 0
-  playerTeam: 0
+  _playerTeam: 0
   currentState: 0
   playerSpeed: 7
   playerSprintSpeed: 12
@@ -345,6 +346,24 @@ MonoBehaviour:
     RotTeleportRadians: 1.5
   UseLegacySharedModeInterpolation: 0
   TargetInterpolationDelay: 0.03
+--- !u!114 &7982928768142140426
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1116383842884122497}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1014831617, guid: e725a070cec140c4caffb81624c8c787, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Type: 1
+  SphereRadius: 0
+  BoxExtents: {x: 0.5, y: 1, z: 0.5}
+  Offset: {x: 0, y: 0, z: 0}
+  Root: {fileID: 0}
+  GizmosColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
 --- !u!1 &1116383843519473496
 GameObject:
   m_ObjectHideFlags: 0
@@ -595,6 +614,8 @@ MonoBehaviour:
   weapons:
   - {fileID: 8464538432343480841, guid: 19deb003904415c4f94bda9b7fa24789, type: 3}
   - {fileID: -6193007175507622488, guid: 469aeb3b56bfa404abbfba9b9c58ed8f, type: 3}
+  weaponsList: []
+  _weaponHolderId: 0
 --- !u!1 &7503572841493876179
 GameObject:
   m_ObjectHideFlags: 0

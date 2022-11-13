@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 8042639564833581946}
   - component: {fileID: 5222422239231123376}
   - component: {fileID: 8464538432343480841}
+  - component: {fileID: -2150188561455793557}
   m_Layer: 0
   m_Name: Pistol 1
   m_TagString: Untagged
@@ -96,6 +97,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2bc9a51fea955a2449b979e0fa929270, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _interpolationDataSource: 0
   data: {fileID: 11400000, guid: 03bdc06dda4d21944a357d11c9949ebf, type: 2}
   maxAmmoAmount: 21
   amoAmount: 7
+  raycastOrigin: {fileID: 0}
+  gunType: 0
+--- !u!114 &-2150188561455793557
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6014901635566222949}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1552182283, guid: e725a070cec140c4caffb81624c8c787, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObjectInterest: 1
+  DefaultInterestGroups: []
+  DestroyWhenStateAuthorityLeaves: 0
+  AllowStateAuthorityOverride: 0
+  AoiPositionSource: {fileID: 0}
+  Flags: 2305
+  NetworkGuid:
+    RawGuidValue: 19deb003904415c4f94bda9b7fa24789
+  NestedObjects: []
+  NetworkedBehaviours:
+  - {fileID: 8464538432343480841}
+  SimulationBehaviours: []

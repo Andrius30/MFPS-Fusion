@@ -15,6 +15,11 @@ MonoBehaviour:
   weaponPositionAtHand: {x: 0.304, y: -0.248, z: 0.896}
   weaponRotationAthand: {x: 0, y: -0.70710677, z: 0, w: 0.70710677}
   weaponName: Pistol
+  cooldown: 1
+  weaponRange: 20
+  weaponMask:
+    serializedVersion: 2
+    m_Bits: 73
   shootType: 0
   projectilePrefab: {fileID: 0}
   projectileSpeed: 0

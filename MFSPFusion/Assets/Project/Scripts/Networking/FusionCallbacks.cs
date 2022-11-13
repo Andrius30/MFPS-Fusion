@@ -39,7 +39,8 @@ public class FusionCallbacks : SimulationBehaviour, INetworkRunnerCallbacks
     }
     void Update()
     {
-
+        if (Mouse.current.leftButton.wasPressedThisFrame)
+            networkInput.buttons.Set(MyButtons.Fire, true);
         if (keyboard.spaceKey.wasReleasedThisFrame)
             networkInput.buttons.Set(MyButtons.SpaceReleased, true);
         if (keyboard.rKey.wasPressedThisFrame)
@@ -101,7 +102,17 @@ public class FusionCallbacks : SimulationBehaviour, INetworkRunnerCallbacks
     }
     public void OnPlayerLeft(NetworkRunner runner, PlayerRef player)
     {
-
+        LobbyJoinedPlayers lb = new LobbyJoinedPlayers();
+        lb.PlayerRef = player;
+        foreach (var pl in GameLauncher.joinedPlayers)
+        {
+            if (pl.PlayerRef.PlayerId == player.PlayerId)
+            {
+                runner.Despawn(pl.netwokObject);
+                GameLauncher.joinedPlayers.Remove(pl);
+                return;
+            }
+        }
     }
     public void OnInput(NetworkRunner runner, NetworkInput input)
     {
