@@ -102,7 +102,7 @@ MonoBehaviour:
   maxAmmoAmount: 90
   amoAmount: 30
   raycastOrigin: {fileID: 0}
-  gunType: 0
+  gunType: 1
 --- !u!114 &-5655670041304588120
 MonoBehaviour:
   m_ObjectHideFlags: 0

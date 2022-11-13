@@ -5,7 +5,7 @@ public class Rifle : BaseGun
 
 
 
-    public override void Attack()
+    public void Attack()
     {
         Debug.Log($"Rifle attack Not implemented");
     }

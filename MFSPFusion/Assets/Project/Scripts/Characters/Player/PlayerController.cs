@@ -118,7 +118,11 @@ public class PlayerController : NetworkBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }
-
+    void Update()
+    {
+        if (Object.HasInputAuthority)
+            playerModel.RotateLocalyX();
+    }
     public void ChangeState(PlayerStates newState)
     {
         if (newState != currentState)

@@ -21,5 +21,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 73
   shootType: 0
+  muzleFlashPrefab: {fileID: 0}
+  hitEffectPrefab: {fileID: 8566166695960781152, guid: 418f0c20990bc9e439c1e56e8e259c33, type: 3}
   projectilePrefab: {fileID: 0}
   projectileSpeed: 0

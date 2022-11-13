@@ -47,6 +47,9 @@ public class FusionCallbacks : SimulationBehaviour, INetworkRunnerCallbacks
             networkInput.buttons.Set(MyButtons.Ready, true);
         if (keyboard.spaceKey.wasPressedThisFrame)
             networkInput.buttons.Set(MyButtons.Jump, true);
+
+        networkInput.mousex = Input.GetAxisRaw("Mouse X");
+        networkInput.mousey = Input.GetAxisRaw("Mouse Y");
     }
 
     public void SetConnectionStatus(ConnectionStatus status)
@@ -124,8 +127,6 @@ public class FusionCallbacks : SimulationBehaviour, INetworkRunnerCallbacks
         networkInput.buttons.Set(MyButtons.LeftCtrl, keyboard.leftCtrlKey.isPressed);
 
 
-        networkInput.mousex = Input.GetAxisRaw("Mouse X");
-        networkInput.mousey = Input.GetAxisRaw("Mouse Y") * -1;
 
         input.Set(networkInput);
         networkInput = default;

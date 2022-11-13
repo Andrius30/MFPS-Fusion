@@ -17,22 +17,18 @@ public abstract class BaseGun : Weapon
 
     protected int currentAmmoAmount;
 
-    void Awake()
+    void Start()
     {
-        raycastOrigin = StaticFunctions.FindChild(transform.root, "Main Camera");
+        raycastOrigin = StaticFunctions.FindChild(transform.root, "MainCamera");
     }
-    public override void Update()
-    {
-        base.Update();
-        Attack();
-    }
+
     public override void Attack()
     {
-        Debug.Log($"Attack");
+        if (raycastOrigin == null) return;
         if (GetInput<NetworkInputs>(out var input) == false) return;
+        Debug.DrawRay(raycastOrigin.position, raycastOrigin.forward * data.weaponRange, Color.red);
         if (input.buttons.IsSet(MyButtons.Fire) && gunType == GunType.Single)
         {
-            Debug.Log($"Pressed to shoot");
             if (data.shootType == ShootType.Raycast)
             {
                 var hitOptions = HitOptions.IncludePhysX | HitOptions.SubtickAccuracy | HitOptions.IgnoreInputAuthority;
@@ -40,26 +36,15 @@ public abstract class BaseGun : Weapon
                 {
                     if (hit.GameObject != null)
                     {
-                        #region Debuging
-                        Debug.Log($"Collider hit");
-                        GameObject gm = Instantiate(GameObject.CreatePrimitive(PrimitiveType.Sphere), hit.Point, Quaternion.identity);
-                        Destroy(gm.GetComponent<Collider>());
-                        gm.transform.localScale = new Vector3(.3f, .3f, .3f);
-                        Destroy(gm, 3f);
-                        #endregion
+                        if (Runner.IsServer)
+                        {
+                            NetworkObject gm = Runner.Spawn(data.hitEffectPrefab, hit.Point, Quaternion.identity);
+
+                        }
                     }
                 }
             }
         }
     }
     public abstract void Reload();
-
-
-
-    void OnDrawGizmos()
-    {
-        if (raycastOrigin == null) return;
-        Gizmos.color = Color.red;
-        Gizmos.DrawLine(raycastOrigin.position, (raycastOrigin.position + raycastOrigin.forward) * data.weaponRange);
-    }
 }
