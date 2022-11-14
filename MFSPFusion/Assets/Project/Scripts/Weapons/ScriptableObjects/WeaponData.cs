@@ -20,6 +20,9 @@ public class WeaponData : ScriptableObject
     public float weaponRange;
     public LayerMask weaponMask;
     public ShootType shootType = ShootType.Raycast;
+
+    [ShowIf("shootType", ShootType.Raycast)]
+    public GameObject hitScanProjectilePrefab;
     public GameObject muzleFlashPrefab;
     public GameObject hitEffectPrefab;
 

@@ -20,17 +20,14 @@ public class WeaponsHolder : NetworkBehaviour
     {
         if (Object == null)
         {
-            Debug.LogError($"Object null");
             return;
         }
         if (!Object.HasInputAuthority)
         {
-            Debug.LogError($"Object has no input authority");
             return;
         }
         if (weaponsList.Count <= 0)
         {
-            Debug.LogError($"Weapons list is empty");
             return;
         }
         float wheel = Input.GetAxis("Mouse ScrollWheel");
@@ -66,7 +63,7 @@ public class WeaponsHolder : NetworkBehaviour
 
     IEnumerator DelayedSwitch()
     {
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(.5f);
         SwitchWeapon(currentWeaponIndex);
         RPC_SwitchWeapon(currentWeaponIndex);
     }

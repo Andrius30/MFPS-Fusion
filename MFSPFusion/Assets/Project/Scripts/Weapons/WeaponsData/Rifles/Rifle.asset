@@ -15,12 +15,13 @@ MonoBehaviour:
   weaponPositionAtHand: {x: 0.41, y: -0.235, z: 0.697}
   weaponRotationAthand: {x: 0, y: -0.70710677, z: 0, w: 0.70710677}
   weaponName: Rifle
-  cooldown: 0
-  weaponRange: 0
+  cooldown: 0.1
+  weaponRange: 200
   weaponMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 73
   shootType: 0
+  hitScanProjectilePrefab: {fileID: 0}
   muzleFlashPrefab: {fileID: 0}
   hitEffectPrefab: {fileID: 8566166695960781152, guid: 418f0c20990bc9e439c1e56e8e259c33, type: 3}
   projectilePrefab: {fileID: 0}

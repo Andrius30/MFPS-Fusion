@@ -1,16 +1,12 @@
 using Fusion;
-using UnityEngine;
 
 public abstract class Weapon : NetworkBehaviour
 {
     public WeaponData data;
 
     public abstract void Attack();
-    public override void FixedUpdateNetwork()
-    {
-        Debug.Log($"Fixed update called");
-        Attack();
-    }
+
+    public override void FixedUpdateNetwork() { Attack(); }
 
     public override void Spawned()
     {
