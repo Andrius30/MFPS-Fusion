@@ -30,16 +30,18 @@ public class FusionCallbacks : SimulationBehaviour, INetworkRunnerCallbacks
     GameplaySpawner gameplaySpawner;
     PlayerRef localPlayer;
     Keyboard keyboard;
+    Mouse mouse;
     NetworkInputs networkInput = new NetworkInputs();
 
     void Start()
     {
         keyboard = Keyboard.current;
+        mouse = Mouse.current;
         levelManager = FindObjectOfType<LevelManager>();
     }
     void Update()
     {
-        if (Mouse.current.leftButton.wasPressedThisFrame)
+        if (mouse.leftButton.wasPressedThisFrame)
             networkInput.buttons.Set(MyButtons.Fire, true);
         if (keyboard.spaceKey.wasReleasedThisFrame)
             networkInput.buttons.Set(MyButtons.SpaceReleased, true);
@@ -126,7 +128,7 @@ public class FusionCallbacks : SimulationBehaviour, INetworkRunnerCallbacks
         networkInput.buttons.Set(MyButtons.LeftShiftHolding, keyboard.leftShiftKey.isPressed);
         networkInput.buttons.Set(MyButtons.LeftCtrl, keyboard.leftCtrlKey.isPressed);
 
-
+        networkInput.buttons.Set(MyButtons.FireHold, mouse.leftButton.isPressed);
 
         input.Set(networkInput);
         networkInput = default;

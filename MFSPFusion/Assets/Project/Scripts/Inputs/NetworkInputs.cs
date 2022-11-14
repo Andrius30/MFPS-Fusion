@@ -11,7 +11,8 @@ enum MyButtons
     LeftShiftHolding = 6,
     LeftCtrl = 7,
     Ready = 8,
-    Fire = 9
+    Fire = 9,
+    FireHold
     //LeftCtrlReleased = 9,
 }
 public struct NetworkInputs : INetworkInput
