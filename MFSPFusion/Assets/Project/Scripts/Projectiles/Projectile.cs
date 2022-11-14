@@ -6,6 +6,7 @@ public class Projectile : NetworkBehaviour
     public float projectileSpeed;
     public Vector3 direction;
     public float liveTime = 3f;
+    [SerializeField] TrailRenderer trail;
 
     [Networked] protected TickTimer liveTimer { get; set; }
 
@@ -22,6 +23,9 @@ public class Projectile : NetworkBehaviour
             Runner.Despawn(Object);
         }
     }
-
+    void OnDisable()
+    {
+        trail.Clear();
+    }
 
 }

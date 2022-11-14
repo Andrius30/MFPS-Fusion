@@ -1,3 +1,4 @@
+using Fusion;
 using Sirenix.OdinInspector;
 using System;
 using UnityEngine;
@@ -24,7 +25,7 @@ public class WeaponData : ScriptableObject
     [ShowIf("shootType", ShootType.Raycast)]
     public GameObject hitScanProjectilePrefab;
     public GameObject muzleFlashPrefab;
-    public GameObject hitEffectPrefab;
+    public NetworkObject hitEffectPrefab;
 
     [ShowIf("shootType", ShootType.Rigidbody)]
     public Rigidbody projectilePrefab;

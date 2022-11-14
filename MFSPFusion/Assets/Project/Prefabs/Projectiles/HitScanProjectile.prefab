@@ -188,6 +188,7 @@ MonoBehaviour:
   projectileSpeed: 120
   direction: {x: 0, y: 0, z: 0}
   liveTime: 3
+  trail: {fileID: 7293706305656124245}
 --- !u!96 &7293706305656124245
 TrailRenderer:
   serializedVersion: 2

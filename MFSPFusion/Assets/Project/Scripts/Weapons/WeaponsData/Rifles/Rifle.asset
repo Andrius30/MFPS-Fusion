@@ -23,6 +23,6 @@ MonoBehaviour:
   shootType: 0
   hitScanProjectilePrefab: {fileID: 995474327294709008, guid: 51a931585a5fb23428dc0a1cf5a07d9e, type: 3}
   muzleFlashPrefab: {fileID: 2079258130411805641, guid: 70048dcd47aaade45b4686c5d61052aa, type: 3}
-  hitEffectPrefab: {fileID: 4567784988479240184, guid: aabd93cf38e2a274cadd289fe72a89a0, type: 3}
+  hitEffectPrefab: {fileID: -2181206842074654635, guid: aabd93cf38e2a274cadd289fe72a89a0, type: 3}
   projectilePrefab: {fileID: 0}
   projectileSpeed: 0

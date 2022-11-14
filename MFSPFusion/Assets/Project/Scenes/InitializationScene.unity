@@ -366,6 +366,50 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 662275759}
   m_CullTransparentMesh: 1
+--- !u!1 &827204012
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 827204013}
+  - component: {fileID: 827204014}
+  m_Layer: 0
+  m_Name: NetworkPool
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &827204013
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 827204012}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 980098919}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &827204014
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 827204012}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1835b806e3db61c4d8714271b2952985, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &931331041
 GameObject:
   m_ObjectHideFlags: 0
@@ -455,6 +499,7 @@ Transform:
   - {fileID: 2081092010}
   - {fileID: 1358726050}
   - {fileID: 931331042}
+  - {fileID: 827204013}
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -770,6 +815,7 @@ MonoBehaviour:
   playerPrefab: {fileID: 1116383842884122497, guid: 049f223c87085a949936e618be82df03, type: 3}
   levelManager: {fileID: 0}
   status: 0
+  networkPool: {fileID: 827204014}
 --- !u!4 &2081092010
 Transform:
   m_ObjectHideFlags: 0

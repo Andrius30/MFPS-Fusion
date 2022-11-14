@@ -215,7 +215,7 @@ GameObject:
   - component: {fileID: 1116383842884122557}
   - component: {fileID: -172637552925719393}
   - component: {fileID: 1506031873475698553}
-  - component: {fileID: 2678487216185426090}
+  - component: {fileID: 7306814486693937774}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -344,6 +344,7 @@ MonoBehaviour:
   NetworkedBehaviours:
   - {fileID: 1116383842884122557}
   - {fileID: 1506031873475698553}
+  - {fileID: 7306814486693937774}
   - {fileID: 1270688114}
   SimulationBehaviours: []
 --- !u!114 &1506031873475698553
@@ -374,7 +375,7 @@ MonoBehaviour:
     RotTeleportRadians: 1.5
   UseLegacySharedModeInterpolation: 0
   TargetInterpolationDelay: 0.03
---- !u!114 &2678487216185426090
+--- !u!114 &7306814486693937774
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -383,15 +384,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 1116383842884122497}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 1014831617, guid: e725a070cec140c4caffb81624c8c787, type: 3}
+  m_Script: {fileID: 1039544458, guid: e725a070cec140c4caffb81624c8c787, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Type: 1
-  SphereRadius: 0
-  BoxExtents: {x: 0.5, y: 1, z: 0.5}
+  _interpolationDataSource: 0
+  Config: 1
+  BroadRadius: 1.2247449
   Offset: {x: 0, y: 0, z: 0}
-  Root: {fileID: 0}
-  GizmosColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+  GizmosColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+  Hitboxes:
+  - {fileID: 5168905780034893969}
 --- !u!1 &1116383843519473496
 GameObject:
   m_ObjectHideFlags: 0
@@ -426,6 +428,7 @@ Transform:
   - {fileID: 4958206865711751690}
   - {fileID: 1116383843847007673}
   - {fileID: 1270688113}
+  - {fileID: 860613540289380459}
   m_Father: {fileID: 1116383842816820180}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -784,3 +787,53 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &3618556785710992988
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 860613540289380459}
+  - component: {fileID: 5168905780034893969}
+  m_Layer: 0
+  m_Name: HitBox
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &860613540289380459
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3618556785710992988}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1116383843519473492}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5168905780034893969
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3618556785710992988}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1014831617, guid: e725a070cec140c4caffb81624c8c787, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Type: 1
+  SphereRadius: 0
+  BoxExtents: {x: 0.5, y: 1, z: 0.5}
+  Offset: {x: 0, y: 0, z: 0}
+  Root: {fileID: 7306814486693937774}
+  GizmosColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}

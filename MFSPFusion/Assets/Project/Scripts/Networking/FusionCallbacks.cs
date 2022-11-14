@@ -27,6 +27,7 @@ public class FusionCallbacks : SimulationBehaviour, INetworkRunnerCallbacks
     [SerializeField] ConnectionStatus status = ConnectionStatus.Disconnected;
 
     LobbySpawner lobbySpawner;
+    [SerializeField] NetworkPoolManager networkPool;
     GameplaySpawner gameplaySpawner;
     PlayerRef localPlayer;
     Keyboard keyboard;
@@ -88,6 +89,7 @@ public class FusionCallbacks : SimulationBehaviour, INetworkRunnerCallbacks
             GameMode = GameMode.AutoHostOrClient,
             SessionName = "",
             PlayerCount = 10,
+            ObjectPool = networkPool,
             SceneManager = levelManager
         });
         SetConnectionStatus(ConnectionStatus.Connected);
