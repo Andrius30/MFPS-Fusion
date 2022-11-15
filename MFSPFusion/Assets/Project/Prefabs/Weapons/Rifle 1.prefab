@@ -65,7 +65,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &5587677393826508642
 Transform:
   m_ObjectHideFlags: 0
@@ -149,7 +149,7 @@ MonoBehaviour:
   DestroyWhenStateAuthorityLeaves: 0
   AllowStateAuthorityOverride: 0
   AoiPositionSource: {fileID: 0}
-  Flags: 133377
+  Flags: 2305
   NetworkGuid:
     RawGuidValue: 469aeb3b56bfa404abbfba9b9c58ed8f
   NestedObjects: []
@@ -172,7 +172,7 @@ MonoBehaviour:
   _interpolationDataSource: 0
   data: {fileID: 11400000, guid: a7450f0e659298d458130b844aaf1a30, type: 2}
   maxAmmoAmount: 90
-  amoAmount: 30
+  maxAmoAtClipAmount: 30
   weaponBarel: {fileID: 3329922799463537829}
   gunType: 1
   raycastOrigin: {fileID: 0}

@@ -91,5 +91,6 @@ public class WeaponsHolder : NetworkBehaviour
         if (weaponsList.Count <= 0) return;
         weaponsList.ForEach(x => x.gameObject.SetActive(false));
         weaponsList[index].SetActive(true);
+        BaseGun.onWeaponSwitched?.Invoke();
     }
 }

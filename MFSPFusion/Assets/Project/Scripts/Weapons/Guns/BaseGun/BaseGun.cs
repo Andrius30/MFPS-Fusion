@@ -2,19 +2,24 @@ using UnityEngine;
 using Andrius.Core.Utils;
 using Fusion;
 using System.Collections.Generic;
+using Sirenix.OdinInspector;
+using System;
 
 public enum GunType
 {
-    Single,
+    Semi,
     Auto
 }
 
 public abstract class BaseGun : Weapon
 {
+    public static Action onWeaponSwitched;
+
     public int maxAmmoAmount;
-    public int amoAmount;
+    public int maxAmoAtClipAmount;
+    [ReadOnly] int currentAmount;
     public Transform weaponBarel;
-    public GunType gunType = GunType.Single;
+    public GunType gunType = GunType.Semi;
 
     [HideInInspector] public Transform raycastOrigin;
 
@@ -22,9 +27,15 @@ public abstract class BaseGun : Weapon
     protected TickTimer cooldownTimer;
     NetworkObject muzleFlashObject;
     List<ParticleSystem> muzleFlashs = new List<ParticleSystem>();
+    BaseCharacter controller;
+    [Networked] TickTimer reloadTimer { get; set; }
 
     void Start()
     {
+        reloadTimer = TickTimer.CreateFromSeconds(Runner, data.reloadTime);
+        currentAmount = maxAmoAtClipAmount;
+        controller = transform.root.GetComponent<BaseCharacter>();
+        controller.statsScreen.SetAmmo(currentAmount, maxAmmoAmount);
         if (Runner.IsServer)
         {
             muzleFlashObject = Runner.Spawn(data.muzleFlashPrefab, weaponBarel.position, weaponBarel.rotation, Object.InputAuthority);
@@ -39,19 +50,30 @@ public abstract class BaseGun : Weapon
         if (!cooldownTimer.ExpiredOrNotRunning(Runner)) return;
         if (raycastOrigin == null) return;
         if (GetInput<NetworkInputs>(out var input) == false) return;
-        Debug.DrawRay(raycastOrigin.position, raycastOrigin.forward * data.weaponRange, Color.red);
-        if (input.buttons.IsSet(MyButtons.Fire) && gunType == GunType.Single)
+        if (currentAmount > 0)
         {
-            Shoot();
+            Debug.DrawRay(raycastOrigin.position, raycastOrigin.forward * data.weaponRange, Color.red);
+            if (input.buttons.IsSet(MyButtons.Fire) && gunType == GunType.Semi)
+            {
+                Shoot();
+            }
+            else if (input.buttons.IsSet(MyButtons.FireHold) && gunType == GunType.Auto)
+            {
+                Shoot();
+            }
         }
-        else if (input.buttons.IsSet(MyButtons.FireHold) && gunType == GunType.Auto)
+        else
         {
-            Shoot();
+            if (maxAmmoAmount > 0)
+                Reload();
         }
     }
 
-    void Shoot()
+    public virtual void Shoot()
     {
+        currentAmount -= 1;
+        controller.statsScreen.SetAmmo(currentAmount, maxAmmoAmount);
+
         ActivateParticleSystem();
         cooldownTimer = TickTimer.CreateFromSeconds(Runner, data.cooldown);
         if (data.shootType == ShootType.Raycast)
@@ -89,14 +111,48 @@ public abstract class BaseGun : Weapon
             }
         }
     }
+    public virtual void Reload()
+    {
+        if (currentAmount <= 0)
+        {
+            Debug.Log($"Reloading");
+            if (reloadTimer.ExpiredOrNotRunning(Runner))
+            {
+                if (maxAmmoAmount - maxAmoAtClipAmount >= 0)
+                {
+                    currentAmmoAmount = maxAmoAtClipAmount;
+                    maxAmmoAmount -= maxAmoAtClipAmount;
+                    controller.statsScreen.SetAmmo(currentAmount, maxAmmoAmount);
+                }
+                else
+                {
+                    currentAmmoAmount = maxAmmoAmount;
+                    maxAmmoAmount = 0;
+                    controller.statsScreen.SetAmmo(currentAmount, maxAmmoAmount);
+                }
+                Debug.Log($"Reload end");
+            }
+        }
+    }
 
+    void UpdateUI()
+    {
+        controller.statsScreen.SetAmmo(currentAmount, maxAmmoAmount);
+        controller.statsScreen.SetGunIcon(data.weaponIcon);
+    }
     void ActivateParticleSystem() => muzleFlashs.ForEach(x => x.Play());
-
     void CreateProjectile(Vector3 direction)
     {
         NetworkObject projectileObj = Runner.Spawn(data.hitScanProjectilePrefab, weaponBarel.position, weaponBarel.rotation, Object.InputAuthority);
         Projectile projectile = projectileObj.GetComponent<Projectile>();
         projectile.direction = direction;
     }
-    public abstract void Reload();
+    public virtual void OnEnable()
+    {
+        onWeaponSwitched += UpdateUI;
+    }
+    public virtual void OnDisable()
+    {
+        onWeaponSwitched -= UpdateUI;
+    }
 }

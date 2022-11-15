@@ -65,6 +65,7 @@ public class GameManager : MonoBehaviour
             controller.transform.position = gameplaySpawner.GetSpawnPosition(controller.playerTeam);
         }
         controller.initHealth = controller.maxHealth;
+        controller.statsScreen.SetHealthStats(controller.initHealth, controller.maxHealth);
         controller.gameObject.SetActive(true);
     }
 }

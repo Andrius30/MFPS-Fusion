@@ -20,19 +20,24 @@ public class WeaponData : ScriptableObject
     public float cooldown;
     public float weaponRange;
     public float weaponDamage;
+    public float reloadTime;
+    public Sprite weaponIcon;
     public LayerMask weaponMask;
     public ShootType shootType = ShootType.Raycast;
 
     [ShowIf("shootType", ShootType.Raycast)]
     public GameObject hitScanProjectilePrefab;
     public GameObject muzleFlashPrefab;
-    public NetworkObject bulletImpactConretePrefab;
-    public NetworkObject bulletImpactSandPrefab;
-    public NetworkObject bulletImpactSoftBodyPrefab;
-    public NetworkObject bulletImpactWoodPrefab;
-    public NetworkObject bulletImpactMetalPrefab;
-    public NetworkObject bulletImpactDirtPrefab;
-    public NetworkObject bulletImpactBloodPrefab;
+
+    #region Bullet impacts
+    [FoldoutGroup("Bullet impacts")] public NetworkObject bulletImpactConretePrefab;
+    [FoldoutGroup("Bullet impacts")] public NetworkObject bulletImpactSandPrefab;
+    [FoldoutGroup("Bullet impacts")] public NetworkObject bulletImpactSoftBodyPrefab;
+    [FoldoutGroup("Bullet impacts")] public NetworkObject bulletImpactWoodPrefab;
+    [FoldoutGroup("Bullet impacts")] public NetworkObject bulletImpactMetalPrefab;
+    [FoldoutGroup("Bullet impacts")] public NetworkObject bulletImpactDirtPrefab;
+    [FoldoutGroup("Bullet impacts")] public NetworkObject bulletImpactBloodPrefab; 
+    #endregion
 
     [ShowIf("shootType", ShootType.Rigidbody)]
     public Rigidbody projectilePrefab;

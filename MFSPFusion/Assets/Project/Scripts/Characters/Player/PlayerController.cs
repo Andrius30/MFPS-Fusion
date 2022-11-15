@@ -60,7 +60,7 @@ public class PlayerController : BaseCharacter
     [FoldoutGroup("Wall Climb")] public float wallClimbDetectionLength = 1f;
     [FoldoutGroup("Wall Climb")] public float maxClimbAngle = 30f;
     #endregion
-    
+
     #region Getters
     public float MouseSensitivity => mouseSensitivity;
 
@@ -112,6 +112,7 @@ public class PlayerController : BaseCharacter
         else
         {
             cameraTransform.gameObject.SetActive(false);
+            statsScreen.gameObject.SetActive(false);
         }
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
@@ -150,10 +151,8 @@ public class PlayerController : BaseCharacter
     public override void Spawned()
     {
         initHealth = maxHealth;
-
+        statsScreen.SetHealthStats(initHealth, maxHealth);
     }
-    //[Rpc(RpcSources.All, RpcTargets.All, InvokeLocal = true)]
-
 
     void ChangeSpeedBasedOnState(NetworkInputs input)
     {

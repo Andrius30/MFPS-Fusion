@@ -1,3 +1,4 @@
+using Andrius.Core.Utils;
 using Fusion;
 using UnityEngine;
 
@@ -13,6 +14,7 @@ public abstract class BaseCharacter : NetworkBehaviour
     [Networked] public Teams playerTeam { get; set; }
 
     public HitboxRoot hitboxRoot;
+    public PlayerStatsScreen statsScreen;
 
     static void OnHealthChanged(Changed<BaseCharacter> changed)
     {
@@ -20,7 +22,11 @@ public abstract class BaseCharacter : NetworkBehaviour
         var newHp = changed.Behaviour.initHealth;
 
         if (changed.Behaviour.Object.HasInputAuthority && changed.Behaviour.initHealth != changed.Behaviour.maxHealth)
+        {
             changed.Behaviour.damageScreen.FadeIn(changed.Behaviour.damageScreenvalue, changed.Behaviour.damageScreenDuration);
+            changed.Behaviour.statsScreen.SetHealthStats(changed.Behaviour.initHealth, changed.Behaviour.maxHealth);
+
+        }
         if (newHp <= 0)
         {
             changed.Behaviour.Die();
@@ -31,7 +37,6 @@ public abstract class BaseCharacter : NetworkBehaviour
     {
         if (initHealth <= 0) return;
         initHealth -= damage;
-
         if (initHealth <= 0)
         {
             Die();

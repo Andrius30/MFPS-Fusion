@@ -147,7 +147,7 @@ MonoBehaviour:
   _interpolationDataSource: 0
   data: {fileID: 11400000, guid: 03bdc06dda4d21944a357d11c9949ebf, type: 2}
   maxAmmoAmount: 21
-  amoAmount: 7
+  maxAmoAtClipAmount: 7
   weaponBarel: {fileID: 7582345271004094126}
   gunType: 0
   raycastOrigin: {fileID: 0}
