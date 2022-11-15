@@ -11,7 +11,6 @@ public class DamageScreen : MonoBehaviour
 
     public void FadeIn(float value, float duration)
     {
-        Debug.Log($"Fade in");
         bloodScreenImg.DOFade(value, duration);
     }
     public void FadeOut(float value, float duration)

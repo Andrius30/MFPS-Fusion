@@ -18,7 +18,7 @@ MonoBehaviour:
   cooldown: 0.1
   weaponRange: 200
   weaponDamage: 3
-  reloadTime: 0
+  reloadTime: 2
   weaponIcon: {fileID: 21300000, guid: 24a75b97d46b0b94da09bd36da4a2824, type: 3}
   weaponMask:
     serializedVersion: 2

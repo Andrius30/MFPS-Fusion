@@ -4,6 +4,8 @@ using Fusion;
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using System;
+using Andrius.Core.Timers;
+using Timer = Andrius.Core.Timers.Timer;
 
 public enum GunType
 {
@@ -23,16 +25,15 @@ public abstract class BaseGun : Weapon
 
     [HideInInspector] public Transform raycastOrigin;
 
-    protected int currentAmmoAmount;
     protected TickTimer cooldownTimer;
     NetworkObject muzleFlashObject;
     List<ParticleSystem> muzleFlashs = new List<ParticleSystem>();
     BaseCharacter controller;
-    [Networked] TickTimer reloadTimer { get; set; }
+    Timer reloadTimer;
 
     void Start()
     {
-        reloadTimer = TickTimer.CreateFromSeconds(Runner, data.reloadTime);
+        reloadTimer = new Timer(data.reloadTime, Reload, false, true);
         currentAmount = maxAmoAtClipAmount;
         controller = transform.root.GetComponent<BaseCharacter>();
         controller.statsScreen.SetAmmo(currentAmount, maxAmmoAmount);
@@ -44,7 +45,21 @@ public abstract class BaseGun : Weapon
             raycastOrigin = StaticFunctions.FindChild(transform.root, "MainCamera");
         }
     }
-
+    public override void Update()
+    {
+        if (!reloadTimer.IsDone())
+        {
+            reloadTimer.StartTimer();
+        }
+        base.Update();
+        if (currentAmount <= 0)
+        {
+            if (Input.GetKeyDown(KeyCode.R) && reloadTimer.IsDone())
+            {
+                reloadTimer.SetTimer(data.reloadTime, false);
+            }
+        }
+    }
     public override void Attack()
     {
         if (!cooldownTimer.ExpiredOrNotRunning(Runner)) return;
@@ -62,11 +77,7 @@ public abstract class BaseGun : Weapon
                 Shoot();
             }
         }
-        else
-        {
-            if (maxAmmoAmount > 0)
-                Reload();
-        }
+
     }
 
     public virtual void Shoot()
@@ -93,13 +104,11 @@ public abstract class BaseGun : Weapon
                 }
                 else if (hit.Collider != null) // hit something else
                 {
-                    Debug.Log($"hit collider");
                     surface = hit.Collider.GetComponent<Surface>();
                     // TODO: Add some logic what will happens if hit other objects
                 }
                 if (surface != null)
                 {
-                    Debug.Log($"Surface {surface.surfaceType}");
                     data.PlayImpactEffect(Runner, hit, surface);
                 }
                 Vector3 dir = (hit.Point - weaponBarel.position).normalized;
@@ -113,25 +122,17 @@ public abstract class BaseGun : Weapon
     }
     public virtual void Reload()
     {
-        if (currentAmount <= 0)
+        if (maxAmmoAmount - maxAmoAtClipAmount >= 0)
         {
-            Debug.Log($"Reloading");
-            if (reloadTimer.ExpiredOrNotRunning(Runner))
-            {
-                if (maxAmmoAmount - maxAmoAtClipAmount >= 0)
-                {
-                    currentAmmoAmount = maxAmoAtClipAmount;
-                    maxAmmoAmount -= maxAmoAtClipAmount;
-                    controller.statsScreen.SetAmmo(currentAmount, maxAmmoAmount);
-                }
-                else
-                {
-                    currentAmmoAmount = maxAmmoAmount;
-                    maxAmmoAmount = 0;
-                    controller.statsScreen.SetAmmo(currentAmount, maxAmmoAmount);
-                }
-                Debug.Log($"Reload end");
-            }
+            currentAmount = maxAmoAtClipAmount;
+            maxAmmoAmount -= maxAmoAtClipAmount;
+            controller.statsScreen.SetAmmo(currentAmount, maxAmmoAmount);
+        }
+        else
+        {
+            currentAmount = maxAmmoAmount;
+            maxAmmoAmount = 0;
+            controller.statsScreen.SetAmmo(currentAmount, maxAmmoAmount);
         }
     }
 

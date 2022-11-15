@@ -6,6 +6,7 @@ public abstract class Weapon : NetworkBehaviour
 
     public abstract void Attack();
 
+    public virtual void Update() { }
     public override void FixedUpdateNetwork() { Attack(); }
 
     public override void Spawned()

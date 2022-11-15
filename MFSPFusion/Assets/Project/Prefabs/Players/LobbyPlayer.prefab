@@ -245,8 +245,8 @@ MonoBehaviour:
   hitboxRoot: {fileID: 6844066951704012268}
   statsScreen: {fileID: 7717345858117542405}
   currentState: 0
-  playerSpeed: 7
-  playerSprintSpeed: 12
+  playerSpeed: 12
+  playerSprintSpeed: 18
   playerCrouchSpeed: 3.5
   playerCrouchScale: 0.5
   maxSlopeAngle: 45

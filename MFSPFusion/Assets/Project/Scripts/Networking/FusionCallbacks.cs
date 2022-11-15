@@ -46,7 +46,7 @@ public class FusionCallbacks : SimulationBehaviour, INetworkRunnerCallbacks
             networkInput.buttons.Set(MyButtons.Fire, true);
         if (keyboard.spaceKey.wasReleasedThisFrame)
             networkInput.buttons.Set(MyButtons.SpaceReleased, true);
-        if (keyboard.rKey.wasPressedThisFrame)
+        if (keyboard.gKey.wasPressedThisFrame)
             networkInput.buttons.Set(MyButtons.Ready, true);
         if (keyboard.spaceKey.wasPressedThisFrame)
             networkInput.buttons.Set(MyButtons.Jump, true);
