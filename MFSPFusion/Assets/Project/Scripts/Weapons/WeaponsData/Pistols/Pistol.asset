@@ -17,12 +17,19 @@ MonoBehaviour:
   weaponName: Pistol
   cooldown: 0
   weaponRange: 20
+  weaponDamage: 5
   weaponMask:
     serializedVersion: 2
     m_Bits: 73
   shootType: 0
   hitScanProjectilePrefab: {fileID: 995474327294709008, guid: 51a931585a5fb23428dc0a1cf5a07d9e, type: 3}
-  muzleFlashPrefab: {fileID: 6038010263965447052, guid: 2d4674da67050934389e2855b6c074a5, type: 3}
-  hitEffectPrefab: {fileID: -2181206842074654635, guid: aabd93cf38e2a274cadd289fe72a89a0, type: 3}
+  muzleFlashPrefab: {fileID: 7671954395342316256, guid: d206e1d25bbb39d46a142365875184d3, type: 3}
+  bulletImpactConretePrefab: {fileID: 4117504372848998867, guid: 73bb245c487a33842ba3a6f0aceeb772, type: 3}
+  bulletImpactSandPrefab: {fileID: 259710483237493665, guid: b917f253da94b3844837c489c4cde495, type: 3}
+  bulletImpactSoftBodyPrefab: {fileID: 2974642786956434515, guid: ce4fb8ef407fd2b43acaa9a2a0d13ec5, type: 3}
+  bulletImpactWoodPrefab: {fileID: 3235042058105806470, guid: a59238061a2dfc54d903c442a4f06b9c, type: 3}
+  bulletImpactMetalPrefab: {fileID: 8478665661632306281, guid: 2b6c7ed9972174a42966c01420b0e6cd, type: 3}
+  bulletImpactDirtPrefab: {fileID: 4980746161851346145, guid: 3de00fc95e127bb4aa7d8ea086acb8c3, type: 3}
+  bulletImpactBloodPrefab: {fileID: 2226259301689900453, guid: d89a39f62a93c414e976d621badb27ef, type: 3}
   projectilePrefab: {fileID: 0}
   projectileSpeed: 0

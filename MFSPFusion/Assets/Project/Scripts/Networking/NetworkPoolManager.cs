@@ -28,7 +28,6 @@ public class NetworkPoolManager : MonoBehaviour, INetworkObjectPool
 
             if (obj == null)
             {
-                Debug.Log($"Obj null! Create new obj");
                 obj = Instantiate(prefab, Vector3.zero, Quaternion.identity);
                 poolsByInstance[obj] = objectPool;
             }
@@ -41,7 +40,7 @@ public class NetworkPoolManager : MonoBehaviour, INetworkObjectPool
 
     public void ReleaseInstance(NetworkRunner runner, NetworkObject instance, bool isSceneObject)
     {
-        Debug.Log($"Releasing {instance} instance, isSceneObject={isSceneObject}");
+        //Debug.Log($"Releasing {instance} instance, isSceneObject={isSceneObject}");
         if (instance != null)
         {
             ObjectPool pool;

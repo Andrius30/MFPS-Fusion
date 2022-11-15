@@ -1,7 +1,9 @@
 using Fusion;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 [Serializable]
 public struct LobbyJoinedPlayers
@@ -45,5 +47,24 @@ public class GameManager : MonoBehaviour
         //if (count >= 2)
         //    return true;
         return true; // FIXME: false
+    }
+
+    public void RespawnPlayer(BaseCharacter controller) => StartCoroutine(RespawnRoutine(controller));
+    IEnumerator RespawnRoutine(BaseCharacter controller)
+    {
+        yield return new WaitForSeconds(5f);
+        int sceneIndex = SceneManager.GetActiveScene().buildIndex;
+        if (sceneIndex == 2) // lobby
+        {
+            var lobbySpawner = FindObjectOfType<LobbySpawner>();
+            controller.transform.position = lobbySpawner.GetSpawnPosition();
+        }
+        else if (sceneIndex == 3) // gameplay
+        {
+            var gameplaySpawner = FindObjectOfType<GameplaySpawner>();
+            controller.transform.position = gameplaySpawner.GetSpawnPosition(controller.playerTeam);
+        }
+        controller.initHealth = controller.maxHealth;
+        controller.gameObject.SetActive(true);
     }
 }

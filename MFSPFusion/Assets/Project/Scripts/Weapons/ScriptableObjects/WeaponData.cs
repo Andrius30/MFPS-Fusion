@@ -19,17 +19,55 @@ public class WeaponData : ScriptableObject
     public string weaponName;
     public float cooldown;
     public float weaponRange;
+    public float weaponDamage;
     public LayerMask weaponMask;
     public ShootType shootType = ShootType.Raycast;
 
     [ShowIf("shootType", ShootType.Raycast)]
     public GameObject hitScanProjectilePrefab;
     public GameObject muzleFlashPrefab;
-    public NetworkObject hitEffectPrefab;
+    public NetworkObject bulletImpactConretePrefab;
+    public NetworkObject bulletImpactSandPrefab;
+    public NetworkObject bulletImpactSoftBodyPrefab;
+    public NetworkObject bulletImpactWoodPrefab;
+    public NetworkObject bulletImpactMetalPrefab;
+    public NetworkObject bulletImpactDirtPrefab;
+    public NetworkObject bulletImpactBloodPrefab;
 
     [ShowIf("shootType", ShootType.Rigidbody)]
     public Rigidbody projectilePrefab;
     [ShowIf("shootType", ShootType.Rigidbody)]
     public float projectileSpeed;
 
+    internal void PlayImpactEffect(NetworkRunner runner, LagCompensatedHit hit, Surface surface)
+    {
+        switch (surface.surfaceType)
+        {
+            case SurfaceType.Concrete:
+                CreatehitEffect(runner, hit, bulletImpactConretePrefab);
+                break;
+            case SurfaceType.Sand:
+                CreatehitEffect(runner, hit, bulletImpactSandPrefab);
+                break;
+            case SurfaceType.SoftBody:
+                CreatehitEffect(runner, hit, bulletImpactSoftBodyPrefab);
+                break;
+            case SurfaceType.Wood:
+                CreatehitEffect(runner, hit, bulletImpactWoodPrefab);
+                break;
+            case SurfaceType.Metal:
+                CreatehitEffect(runner, hit, bulletImpactMetalPrefab);
+                break;
+            case SurfaceType.Dirt:
+                CreatehitEffect(runner, hit, bulletImpactDirtPrefab);
+                break;
+            case SurfaceType.Blood:
+                CreatehitEffect(runner, hit, bulletImpactBloodPrefab);
+                break;
+        }
+    }
+    void CreatehitEffect(NetworkRunner runner, LagCompensatedHit hit, NetworkObject prefab)
+    {
+        runner.Spawn(prefab, hit.Point, Quaternion.identity);
+    }
 }

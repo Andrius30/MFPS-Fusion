@@ -1,9 +1,8 @@
 using Fusion;
 using Sirenix.OdinInspector;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
-public class PlayerController : NetworkBehaviour
+public class PlayerController : BaseCharacter
 {
     public enum PlayerStates
     {
@@ -16,7 +15,6 @@ public class PlayerController : NetworkBehaviour
 
     }
 
-    [Networked] public Teams playerTeam { get; set; }
     public PlayerRef thisPlayer;
 
     #region Move settings
@@ -45,8 +43,8 @@ public class PlayerController : NetworkBehaviour
     [FoldoutGroup("Wall Running")] public float wallRunSpeed;
     [HideInInspector] public RaycastHit leftWallHit;
     [HideInInspector] public RaycastHit rightWallHit;
-    [ReadOnly] public bool wallLeft;
-    [ReadOnly] public bool wallRight;
+    [HideInInspector] public bool wallLeft;
+    [HideInInspector] public bool wallRight;
     #endregion
 
     #region Ground Check
@@ -62,7 +60,7 @@ public class PlayerController : NetworkBehaviour
     [FoldoutGroup("Wall Climb")] public float wallClimbDetectionLength = 1f;
     [FoldoutGroup("Wall Climb")] public float maxClimbAngle = 30f;
     #endregion
-
+    
     #region Getters
     public float MouseSensitivity => mouseSensitivity;
 
@@ -70,7 +68,7 @@ public class PlayerController : NetworkBehaviour
 
     #region hide in inspector
     [HideInInspector] public bool wallRunning;
-    [ReadOnly] public float currentSpeed;
+    [HideInInspector] public float currentSpeed;
     [HideInInspector] public GroundCheck groundCheck;
     [HideInInspector] public Vector3 moveDirection;
     [HideInInspector] public bool isCrouching = false;
@@ -149,6 +147,13 @@ public class PlayerController : NetworkBehaviour
             ChangeState(PlayerStates.NORMAL);
         }
     }
+    public override void Spawned()
+    {
+        initHealth = maxHealth;
+
+    }
+    //[Rpc(RpcSources.All, RpcTargets.All, InvokeLocal = true)]
+
 
     void ChangeSpeedBasedOnState(NetworkInputs input)
     {
@@ -186,6 +191,8 @@ public class PlayerController : NetworkBehaviour
         wallClimb.Visualize();
         playerSlopeMovement.Visualize();
     }
+
+
 #endif
 
 
