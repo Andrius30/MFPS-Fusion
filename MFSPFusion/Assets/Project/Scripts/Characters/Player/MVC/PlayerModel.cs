@@ -18,7 +18,7 @@ public class PlayerModel
         float mouseY = Input.GetAxisRaw("Mouse Y");
         xRotation -= mouseY;
         controller.cameraTransform.localRotation = Quaternion.Euler(xRotation, 0, 0);
-        controller.playerhandTransform.localRotation = Quaternion.Euler(xRotation, 0, 0);
+      //  controller.playerhandTransform.localRotation = Quaternion.Euler(xRotation, 0, 0);
 
     }
 

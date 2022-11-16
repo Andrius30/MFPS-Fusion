@@ -24,6 +24,9 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 73
   shootType: 0
+  recoilX: 0
+  recoilY: 6
+  recoilZ: 0.35
   hitScanProjectilePrefab: {fileID: 995474327294709008, guid: 51a931585a5fb23428dc0a1cf5a07d9e, type: 3}
   muzleFlashPrefab: {fileID: 483034351676635559, guid: 4eae89a7e74deee459274f1f6f427215, type: 3}
   bulletImpactConretePrefab: {fileID: 4117504372848998867, guid: 73bb245c487a33842ba3a6f0aceeb772, type: 3}

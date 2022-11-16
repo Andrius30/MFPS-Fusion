@@ -25,6 +25,13 @@ public class WeaponData : ScriptableObject
     public LayerMask weaponMask;
     public ShootType shootType = ShootType.Raycast;
 
+    #region Recoil
+    [FoldoutGroup("Recoil")] public float recoilX;
+    [FoldoutGroup("Recoil")] public float recoilY;
+    [FoldoutGroup("Recoil")] public float recoilZ;
+ 
+    #endregion
+
     [ShowIf("shootType", ShootType.Raycast)]
     public GameObject hitScanProjectilePrefab;
     public GameObject muzleFlashPrefab;
@@ -36,7 +43,7 @@ public class WeaponData : ScriptableObject
     [FoldoutGroup("Bullet impacts")] public NetworkObject bulletImpactWoodPrefab;
     [FoldoutGroup("Bullet impacts")] public NetworkObject bulletImpactMetalPrefab;
     [FoldoutGroup("Bullet impacts")] public NetworkObject bulletImpactDirtPrefab;
-    [FoldoutGroup("Bullet impacts")] public NetworkObject bulletImpactBloodPrefab; 
+    [FoldoutGroup("Bullet impacts")] public NetworkObject bulletImpactBloodPrefab;
     #endregion
 
     [ShowIf("shootType", ShootType.Rigidbody)]

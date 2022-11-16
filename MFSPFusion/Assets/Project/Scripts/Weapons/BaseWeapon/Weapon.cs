@@ -1,8 +1,16 @@
 using Fusion;
+using UnityEngine;
 
 public abstract class Weapon : NetworkBehaviour
 {
     public WeaponData data;
+    protected Animator animator;
+    protected int shootTrigger = Animator.StringToHash("Shoot");
+
+    protected virtual void Start()
+    {
+        animator = GetComponentInChildren<Animator>();
+    }
 
     public abstract void Attack();
 

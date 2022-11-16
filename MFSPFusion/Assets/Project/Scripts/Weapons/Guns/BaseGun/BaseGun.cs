@@ -23,6 +23,7 @@ public abstract class BaseGun : Weapon
     public Transform weaponBarel;
     public GunType gunType = GunType.Semi;
 
+    [SerializeField] bool unlimtedAmmo = false;
     [HideInInspector] public Transform raycastOrigin;
 
     protected TickTimer cooldownTimer;
@@ -31,8 +32,10 @@ public abstract class BaseGun : Weapon
     BaseCharacter controller;
     Timer reloadTimer;
 
-    void Start()
+
+   protected override void Start()
     {
+        base.Start();
         reloadTimer = new Timer(data.reloadTime, Reload, false, true);
         currentAmount = maxAmoAtClipAmount;
         controller = transform.root.GetComponent<BaseCharacter>();
@@ -82,9 +85,13 @@ public abstract class BaseGun : Weapon
 
     public virtual void Shoot()
     {
-        currentAmount -= 1;
-        controller.statsScreen.SetAmmo(currentAmount, maxAmmoAmount);
-
+        if (!unlimtedAmmo)
+        {
+            currentAmount -= 1;
+            controller.statsScreen.SetAmmo(currentAmount, maxAmmoAmount);
+        }
+        animator.SetTrigger(shootTrigger);
+        Recoil.onRecoil?.Invoke(this);
         ActivateParticleSystem();
         cooldownTimer = TickTimer.CreateFromSeconds(Runner, data.cooldown);
         if (data.shootType == ShootType.Raycast)
