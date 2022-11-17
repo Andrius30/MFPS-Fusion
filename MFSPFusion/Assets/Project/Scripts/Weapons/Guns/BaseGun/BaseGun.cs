@@ -17,6 +17,7 @@ public abstract class BaseGun : Weapon
 {
     public static Action onWeaponSwitched;
 
+    public int gunID;
     public int maxAmmoAmount;
     public int maxAmoAtClipAmount;
     [ReadOnly] int currentAmount;
@@ -24,37 +25,39 @@ public abstract class BaseGun : Weapon
     public GunType gunType = GunType.Semi;
 
     [SerializeField] bool unlimtedAmmo = false;
-    [HideInInspector] public Transform raycastOrigin;
 
-    protected TickTimer cooldownTimer;
-    NetworkObject muzleFlashObject;
+    [Networked] protected TickTimer cooldownTimer { get; set; }
     List<ParticleSystem> muzleFlashs = new List<ParticleSystem>();
-    BaseCharacter controller;
     Timer reloadTimer;
 
+    [ReadOnly] public Transform raycastOrigin;
+    [ReadOnly] BaseCharacter controller;
+    [ReadOnly] GameObject muzleFlashObject;
+    [ReadOnly] Transform cameraRotation;
 
-   protected override void Start()
+    protected override void Start()
     {
+        if (!isEquiped) return;
         base.Start();
+        gunID = Object.InputAuthority.PlayerId;
         reloadTimer = new Timer(data.reloadTime, Reload, false, true);
         currentAmount = maxAmoAtClipAmount;
         controller = transform.root.GetComponent<BaseCharacter>();
         controller.statsScreen.SetAmmo(currentAmount, maxAmmoAmount);
-        if (Runner.IsServer)
-        {
-            muzleFlashObject = Runner.Spawn(data.muzleFlashPrefab, weaponBarel.position, weaponBarel.rotation, Object.InputAuthority);
-            muzleFlashObject.transform.SetParent(weaponBarel);
-            muzleFlashs.AddRange(StaticFunctions.GetAllComponentsInChildren<ParticleSystem>(muzleFlashObject.transform.GetChild(0)));
-            raycastOrigin = StaticFunctions.FindChild(transform.root, "MainCamera");
-        }
+        muzleFlashObject = Instantiate(data.muzleFlashPrefab, weaponBarel.position, weaponBarel.rotation);
+        muzleFlashObject.transform.SetParent(weaponBarel);
+        muzleFlashs.AddRange(StaticFunctions.GetAllComponentsInChildren<ParticleSystem>(muzleFlashObject.transform.GetChild(0)));
+        cameraRotation = StaticFunctions.FindChild(transform.root, "CameraRotation");
+        raycastOrigin = StaticFunctions.FindChild(cameraRotation, "MainCamera");
     }
     public override void Update()
     {
+        if (!isEquiped) return;
+        base.Update();
         if (!reloadTimer.IsDone())
         {
             reloadTimer.StartTimer();
         }
-        base.Update();
         if (currentAmount <= 0)
         {
             if (Input.GetKeyDown(KeyCode.R) && reloadTimer.IsDone())
@@ -65,12 +68,17 @@ public abstract class BaseGun : Weapon
     }
     public override void Attack()
     {
-        if (!cooldownTimer.ExpiredOrNotRunning(Runner)) return;
-        if (raycastOrigin == null) return;
+        if (!cooldownTimer.ExpiredOrNotRunning(Runner))
+        {
+            return;
+        }
+        if (raycastOrigin == null)
+        {
+            return;
+        }
         if (GetInput<NetworkInputs>(out var input) == false) return;
         if (currentAmount > 0)
         {
-            Debug.DrawRay(raycastOrigin.position, raycastOrigin.forward * data.weaponRange, Color.red);
             if (input.buttons.IsSet(MyButtons.Fire) && gunType == GunType.Semi)
             {
                 Shoot();
@@ -145,16 +153,21 @@ public abstract class BaseGun : Weapon
 
     void UpdateUI()
     {
-        controller.statsScreen.SetAmmo(currentAmount, maxAmmoAmount);
-        controller.statsScreen.SetGunIcon(data.weaponIcon);
+        if (Object.HasInputAuthority)
+        {
+            controller.statsScreen.SetAmmo(currentAmount, maxAmmoAmount);
+            controller.statsScreen.SetGunIcon(data.weaponIcon);
+        }
     }
     void ActivateParticleSystem() => muzleFlashs.ForEach(x => x.Play());
     void CreateProjectile(Vector3 direction)
     {
+        if (!Runner.IsServer) return;
         NetworkObject projectileObj = Runner.Spawn(data.hitScanProjectilePrefab, weaponBarel.position, weaponBarel.rotation, Object.InputAuthority);
         Projectile projectile = projectileObj.GetComponent<Projectile>();
         projectile.direction = direction;
     }
+
     public virtual void OnEnable()
     {
         onWeaponSwitched += UpdateUI;

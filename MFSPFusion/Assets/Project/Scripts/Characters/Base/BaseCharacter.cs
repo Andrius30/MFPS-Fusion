@@ -15,6 +15,8 @@ public abstract class BaseCharacter : NetworkBehaviour
 
     public HitboxRoot hitboxRoot;
     public PlayerStatsScreen statsScreen;
+    public WeaponsHolder weaponsHolder;
+
 
     static void OnHealthChanged(Changed<BaseCharacter> changed)
     {
@@ -37,14 +39,21 @@ public abstract class BaseCharacter : NetworkBehaviour
     {
         if (initHealth <= 0) return;
         initHealth -= damage;
-        if (initHealth <= 0)
-        {
-            Die();
-        }
+        //if (initHealth <= 0)
+        //{
+        //    Die();
+        //}
     }
 
     protected virtual void Die()
     {
+        foreach (var weapon in weaponsHolder.weaponsList)
+        {
+            if (weapon.isDropable)
+            {
+                weapon.DropWeapon();
+            }
+        }
         GameManager.instance.RespawnPlayer(this);
         gameObject.SetActive(false);
     }

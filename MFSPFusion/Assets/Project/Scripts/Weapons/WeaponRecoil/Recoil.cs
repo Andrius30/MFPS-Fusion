@@ -1,28 +1,41 @@
-using Sirenix.OdinInspector;
+using Fusion;
 using System;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-public class Recoil : MonoBehaviour
+public class Recoil : NetworkBehaviour
 {
     public static Action<BaseGun> onRecoil;
 
     public float snappiness;
     public float returnSpeed;
+    public float evaluateTime = 2f;
 
+
+    [SerializeField] AnimationCurve animationCurve;
     Vector3 currentRotation;
     Vector3 targetRotation;
 
-    public void Update()
-    {
-        targetRotation = Vector3.Lerp(targetRotation, Vector3.zero, returnSpeed * Time.deltaTime);
-        currentRotation = Vector3.Slerp(currentRotation, targetRotation, snappiness * Time.deltaTime);
-        transform.localRotation = Quaternion.Euler(currentRotation);
-    }
+    BaseGun gun;
 
+    public override void FixedUpdateNetwork()
+    {
+        if (gun == null) return;
+        if (Object.HasInputAuthority && gun.gunID == Object.InputAuthority.PlayerId)
+        {
+            targetRotation = Vector3.Lerp(targetRotation, Vector3.zero, returnSpeed * Time.deltaTime);
+            currentRotation = Vector3.Slerp(currentRotation, targetRotation, snappiness * Time.deltaTime);
+            transform.localRotation = Quaternion.Euler(currentRotation);
+        }
+    }
     public void SetRecoil(BaseGun gun)
     {
-        targetRotation += new Vector3(gun.data.recoilX, Random.Range(gun.data.recoilY, -gun.data.recoilY), Random.Range(gun.data.recoilZ, -gun.data.recoilZ));
+        if (Object.HasInputAuthority && gun.gunID == Object.InputAuthority.PlayerId)
+        {
+            this.gun = gun;
+            float animCurve = -animationCurve.Evaluate(evaluateTime);
+            targetRotation += new Vector3(animCurve, Random.Range(gun.data.recoilY, -gun.data.recoilY), Random.Range(gun.data.recoilZ, -gun.data.recoilZ));
+        }
     }
 
     void OnEnable()
@@ -32,6 +45,6 @@ public class Recoil : MonoBehaviour
     void OnDisable()
     {
         onRecoil -= SetRecoil;
-        
+
     }
 }

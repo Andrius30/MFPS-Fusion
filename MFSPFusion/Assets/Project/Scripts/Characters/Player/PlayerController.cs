@@ -110,7 +110,7 @@ public class PlayerController : BaseCharacter
         }
         else
         {
-            cameraTransform.gameObject.SetActive(false);
+            cameraTransform.GetComponentInChildren<Camera>().enabled = false;
             statsScreen.gameObject.SetActive(false);
         }
         Cursor.lockState = CursorLockMode.Locked;
@@ -180,6 +180,15 @@ public class PlayerController : BaseCharacter
         }
     }
 
+    void OnTriggerEnter(Collider other)
+    {
+        var weapon = other.GetComponent<Weapon>();
+        if (weapon != null && !weapon.isEquiped)
+        {
+            weaponsHolder.PickWeapon(weapon);
+        }
+    }
+
 #if UNITY_EDITOR
     void OnDrawGizmos()
     {
@@ -189,7 +198,6 @@ public class PlayerController : BaseCharacter
         wallClimb.Visualize();
         playerSlopeMovement.Visualize();
     }
-
 
 #endif
 

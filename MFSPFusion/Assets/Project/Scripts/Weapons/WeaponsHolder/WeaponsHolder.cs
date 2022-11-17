@@ -8,9 +8,9 @@ public class WeaponsHolder : NetworkBehaviour
 {
     public static Action onSceneLoadDone;
 
-    [SerializeField] List<Weapon> weapons;
+    public List<Weapon> weapons;
 
-    public List<GameObject> weaponsList = new List<GameObject>();
+    public List<Weapon> weaponsList = new List<Weapon>();
 
     [Networked] public int weaponHolderId { get; set; }
 
@@ -60,6 +60,22 @@ public class WeaponsHolder : NetworkBehaviour
         CreateWepons();
         StartCoroutine(DelayedSwitch());
     }
+    [Rpc(RpcSources.InputAuthority, RpcTargets.All, InvokeLocal = false)]
+    public void RPC_SwitchWeapon(int index)
+    {
+        SwitchWeapon(index);
+    }
+    public void PickWeapon(Weapon weapon)
+    {
+        Debug.Log($"Pick weapon");
+        if (!Runner.IsServer) return;
+        Runner.Despawn(weapon.Object);
+        var gm = Runner.Spawn(weapon.thisWeaponPrefab, inputAuthority: Object.InputAuthority);
+        gm.transform.SetParent(transform);
+        gm.transform.localPosition = weapon.data.weaponPositionAtHand;
+        gm.transform.localRotation = weapon.data.weaponRotationAthand;
+        weaponsList.Add(gm.GetComponent<Weapon>());
+    }
 
     IEnumerator DelayedSwitch()
     {
@@ -67,30 +83,26 @@ public class WeaponsHolder : NetworkBehaviour
         SwitchWeapon(currentWeaponIndex);
         RPC_SwitchWeapon(currentWeaponIndex);
     }
-
-    [Rpc(RpcSources.InputAuthority, RpcTargets.All, InvokeLocal = false)]
-    public void RPC_SwitchWeapon(int index)
-    {
-        SwitchWeapon(index);
-    }
-
     void CreateWepons()
     {
         if (!Runner.IsServer) return;
         foreach (var weapon in weapons)
         {
-            var gm = Runner.Spawn(weapon, inputAuthority: Object.InputAuthority);
+            var gm = Runner.Spawn(weapon.thisWeaponPrefab, inputAuthority: Object.InputAuthority);
             gm.transform.SetParent(transform);
             gm.transform.localPosition = weapon.data.weaponPositionAtHand;
             gm.transform.localRotation = weapon.data.weaponRotationAthand;
-            weaponsList.Add(gm.gameObject);
+            Weapon wep = gm.GetComponent<Weapon>();
+            wep.isEquiped = true;
+            weaponsList.Add(wep);
         }
     }
     void SwitchWeapon(int index)
     {
         if (weaponsList.Count <= 0) return;
         weaponsList.ForEach(x => x.gameObject.SetActive(false));
-        weaponsList[index].SetActive(true);
+        weaponsList[index].gameObject.SetActive(true);
         BaseGun.onWeaponSwitched?.Invoke();
     }
+
 }
