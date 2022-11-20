@@ -45,6 +45,7 @@ GameObject:
   - component: {fileID: 626006647963966312}
   - component: {fileID: 1631824496014196477}
   - component: {fileID: 2847834505427133027}
+  - component: {fileID: -5319979928468926529}
   m_Layer: 0
   m_Name: Pistol
   m_TagString: Untagged
@@ -82,15 +83,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _interpolationDataSource: 0
-  weaponID: 0
+  weaponID: 2
   data: {fileID: 11400000, guid: 03bdc06dda4d21944a357d11c9949ebf, type: 2}
-  isDropable: 0
-  thisWeaponPrefab: {fileID: 626006647963966312}
+  isDropable: 1
   _isEquiped:
     _value: 0
   rb: {fileID: 2847834505427133027}
   weaponCollider: {fileID: 4731059050029329206}
   weaponTriggerCollider: {fileID: 1631824496014196477}
+  gunID: 0
   maxAmmoAmount: 21
   maxAmoAtClipAmount: 7
   weaponBarel: {fileID: 1163071796811600624}
@@ -120,6 +121,7 @@ MonoBehaviour:
   NestedObjects: []
   NetworkedBehaviours:
   - {fileID: 626006647963966313}
+  - {fileID: -5319979928468926529}
   - {fileID: 336207113526703575}
   SimulationBehaviours: []
 --- !u!65 &1631824496014196477
@@ -131,7 +133,7 @@ BoxCollider:
   m_GameObject: {fileID: 626006647963966315}
   m_Material: {fileID: 0}
   m_IsTrigger: 1
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
@@ -151,6 +153,34 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &-5319979928468926529
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 626006647963966315}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1710889294, guid: e725a070cec140c4caffb81624c8c787, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _interpolationDataSource: 0
+  InterpolationSpace: 0
+  InterpolationTarget: {fileID: 2391131013847951489}
+  InterpolateErrorCorrection: 1
+  InterpolatedErrorCorrectionSettings:
+    MinRate: 3.3
+    MaxRate: 10
+    PosBlendStart: 0.25
+    PosBlendEnd: 1
+    PosMinCorrection: 0.025
+    PosTeleportDistance: 2
+    RotBlendStart: 0.1
+    RotBlendEnd: 0.5
+    RotTeleportRadians: 1.5
+  UseLegacySharedModeInterpolation: 0
+  TargetInterpolationDelay: 0.03
 --- !u!1 &1894341292502370689
 GameObject:
   m_ObjectHideFlags: 0
@@ -243,8 +273,8 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1894341292502370689}
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 0
+  m_IsTrigger: 0
+  m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 0.4, y: 0.43, z: 0.34}
   m_Center: {x: 0, y: 0, z: 0}

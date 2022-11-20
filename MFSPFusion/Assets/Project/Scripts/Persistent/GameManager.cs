@@ -23,6 +23,7 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
 
+    public List<Weapon> allWeapons;
     public List<PlayerController> redTeam = new List<PlayerController>();
     public List<PlayerController> blueTeam = new List<PlayerController>();
 
@@ -48,7 +49,14 @@ public class GameManager : MonoBehaviour
         //    return true;
         return true; // FIXME: false
     }
-
+    public Weapon GetWeaponByID(int id)
+    {
+        foreach (var weapon in allWeapons)
+        {
+            if(weapon.weaponID== id) return weapon;
+        }
+        return null;
+    }
     public void RespawnPlayer(BaseCharacter controller) => StartCoroutine(RespawnRoutine(controller));
     IEnumerator RespawnRoutine(BaseCharacter controller)
     {

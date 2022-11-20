@@ -8,29 +8,31 @@ public class WeaponsHolder : NetworkBehaviour
 {
     public static Action onSceneLoadDone;
 
-    public List<Weapon> weapons;
-
     public List<Weapon> weaponsList = new List<Weapon>();
 
     [Networked] public int weaponHolderId { get; set; }
 
-    int currentWeaponIndex = 0;
+    [Networked(OnChanged = nameof(OnChangedSwitchWeapon))] public int currentWeaponIndex { get; set; }
 
-    void Update()
+    static void OnChangedSwitchWeapon(Changed<WeaponsHolder> changed)
     {
-        if (Object == null)
-        {
-            return;
-        }
-        if (!Object.HasInputAuthority)
-        {
-            return;
-        }
-        if (weaponsList.Count <= 0)
-        {
-            return;
-        }
-        float wheel = Input.GetAxis("Mouse ScrollWheel");
+        var newIndex = changed.Behaviour.CurrentWeaponIndex;
+        changed.Behaviour.SwitchWeapon(newIndex);
+    }
+
+    public int CurrentWeaponIndex => currentWeaponIndex;
+
+    public override void FixedUpdateNetwork()
+    {
+        if (GetInput<NetworkInputs>(out var input) == false) return;
+        SwitchWithKeys(input);
+        SwitchWithMouseWheel(input);
+
+    }
+
+    void SwitchWithMouseWheel(NetworkInputs input)
+    {
+        float wheel = input.scrollWheel;
         if (wheel > 0)
         {
             currentWeaponIndex++;
@@ -38,8 +40,6 @@ public class WeaponsHolder : NetworkBehaviour
             {
                 currentWeaponIndex = 0;
             }
-            SwitchWeapon(currentWeaponIndex);
-            RPC_SwitchWeapon(currentWeaponIndex);
         }
         else if (wheel < 0)
         {
@@ -48,8 +48,21 @@ public class WeaponsHolder : NetworkBehaviour
             {
                 currentWeaponIndex = weaponsList.Count - 1;
             }
-            SwitchWeapon(currentWeaponIndex);
-            RPC_SwitchWeapon(currentWeaponIndex);
+        }
+    }
+    void SwitchWithKeys(NetworkInputs input)
+    {
+        if (input.buttons.IsSet(MyButtons.Keyboard1Key))
+        {
+            currentWeaponIndex = 0;
+        }
+        if (input.buttons.IsSet(MyButtons.Keyboard2Key))
+        {
+            currentWeaponIndex = 1;
+        }
+        if (input.buttons.IsSet(MyButtons.Keyboard3Key))
+        {
+            currentWeaponIndex = 2;
         }
     }
 
@@ -60,35 +73,50 @@ public class WeaponsHolder : NetworkBehaviour
         CreateWepons();
         StartCoroutine(DelayedSwitch());
     }
-    [Rpc(RpcSources.InputAuthority, RpcTargets.All, InvokeLocal = false)]
+    [Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority, InvokeLocal = false)]
     public void RPC_SwitchWeapon(int index)
     {
         SwitchWeapon(index);
     }
     public void PickWeapon(Weapon weapon)
     {
-        Debug.Log($"Pick weapon");
-        if (!Runner.IsServer) return;
-        Runner.Despawn(weapon.Object);
-        var gm = Runner.Spawn(weapon.thisWeaponPrefab, inputAuthority: Object.InputAuthority);
-        gm.transform.SetParent(transform);
-        gm.transform.localPosition = weapon.data.weaponPositionAtHand;
-        gm.transform.localRotation = weapon.data.weaponRotationAthand;
-        weaponsList.Add(gm.GetComponent<Weapon>());
+        if (Runner.IsServer)
+        {
+            Weapon wep = null;
+
+            foreach (var wp in GameManager.instance.allWeapons)
+            {
+                if (wp.weaponID == weapon.weaponID)
+                {
+                    wep = Runner.Spawn(wp, Vector3.zero, Quaternion.identity, Object.InputAuthority);
+                    break;
+                }
+            }
+            Runner.Despawn(weapon.Object);
+            wep.gameObject.layer = 0;
+            wep.transform.SetParent(transform);
+            wep.transform.localPosition = wep.data.weaponPositionAtHand;
+            wep.transform.localRotation = wep.data.weaponRotationAthand;
+            wep.ToggleComponents(wep.Object, false);
+            wep.isEquiped = true;
+            weaponsList.Add(wep);
+            currentWeaponIndex = wep.weaponID;
+
+        }
     }
 
     IEnumerator DelayedSwitch()
     {
-        yield return new WaitForSeconds(.5f);
+        yield return new WaitForSeconds(.3f);
         SwitchWeapon(currentWeaponIndex);
         RPC_SwitchWeapon(currentWeaponIndex);
     }
     void CreateWepons()
     {
         if (!Runner.IsServer) return;
-        foreach (var weapon in weapons)
+        foreach (var weapon in GameManager.instance.allWeapons)
         {
-            var gm = Runner.Spawn(weapon.thisWeaponPrefab, inputAuthority: Object.InputAuthority);
+            var gm = Runner.Spawn(weapon, inputAuthority: Object.InputAuthority);
             gm.transform.SetParent(transform);
             gm.transform.localPosition = weapon.data.weaponPositionAtHand;
             gm.transform.localRotation = weapon.data.weaponRotationAthand;
@@ -100,9 +128,12 @@ public class WeaponsHolder : NetworkBehaviour
     void SwitchWeapon(int index)
     {
         if (weaponsList.Count <= 0) return;
-        weaponsList.ForEach(x => x.gameObject.SetActive(false));
-        weaponsList[index].gameObject.SetActive(true);
-        BaseGun.onWeaponSwitched?.Invoke();
+        if (index < weaponsList.Count)
+        {
+            weaponsList.ForEach(x => x.gameObject.SetActive(false));
+            weaponsList[index].gameObject.SetActive(true);
+            BaseGun.onWeaponSwitched?.Invoke();
+        }
     }
 
 }

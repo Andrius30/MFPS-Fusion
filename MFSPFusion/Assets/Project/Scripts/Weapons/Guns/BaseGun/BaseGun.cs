@@ -26,7 +26,6 @@ public abstract class BaseGun : Weapon
 
     [SerializeField] bool unlimtedAmmo = false;
 
-    [Networked] protected TickTimer cooldownTimer { get; set; }
     List<ParticleSystem> muzleFlashs = new List<ParticleSystem>();
     Timer reloadTimer;
 
@@ -54,7 +53,7 @@ public abstract class BaseGun : Weapon
     {
         if (!isEquiped) return;
         base.Update();
-        if (!reloadTimer.IsDone())
+        if (reloadTimer != null && !reloadTimer.IsDone())
         {
             reloadTimer.StartTimer();
         }
@@ -66,6 +65,7 @@ public abstract class BaseGun : Weapon
             }
         }
     }
+
     public override void Attack()
     {
         if (!cooldownTimer.ExpiredOrNotRunning(Runner))
@@ -90,7 +90,6 @@ public abstract class BaseGun : Weapon
         }
 
     }
-
     public virtual void Shoot()
     {
         if (!unlimtedAmmo)
@@ -153,7 +152,8 @@ public abstract class BaseGun : Weapon
 
     void UpdateUI()
     {
-        if (Object.HasInputAuthority)
+        if (controller == null) return;
+        if (Object != null && Object.HasInputAuthority)
         {
             controller.statsScreen.SetAmmo(currentAmount, maxAmmoAmount);
             controller.statsScreen.SetGunIcon(data.weaponIcon);

@@ -178,6 +178,22 @@ PrefabInstance:
       propertyPath: m_Name
       value: GameManager
       objectReference: {fileID: 0}
+    - target: {fileID: 5790063862488203119, guid: e136877fdbd297a44bdd5d48c6c6d761, type: 3}
+      propertyPath: allWeapons.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5790063862488203119, guid: e136877fdbd297a44bdd5d48c6c6d761, type: 3}
+      propertyPath: allWeapons.Array.data[0]
+      value: 
+      objectReference: {fileID: 6143484032133198266, guid: e3b0dbe3acd03584ca5cb0516e93defa, type: 3}
+    - target: {fileID: 5790063862488203119, guid: e136877fdbd297a44bdd5d48c6c6d761, type: 3}
+      propertyPath: allWeapons.Array.data[1]
+      value: 
+      objectReference: {fileID: 626006647963966313, guid: 148b51775e163e542b2706537efeddeb, type: 3}
+    - target: {fileID: 5790063862488203119, guid: e136877fdbd297a44bdd5d48c6c6d761, type: 3}
+      propertyPath: allWeapons.Array.data[2]
+      value: 
+      objectReference: {fileID: 3224895893714142483, guid: f8bf5f3a211d8b34d98878cbbfd4fa94, type: 3}
     m_RemovedComponents:
     - {fileID: 5790063862488203118, guid: e136877fdbd297a44bdd5d48c6c6d761, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: e136877fdbd297a44bdd5d48c6c6d761, type: 3}

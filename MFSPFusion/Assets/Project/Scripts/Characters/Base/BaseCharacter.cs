@@ -20,10 +20,12 @@ public abstract class BaseCharacter : NetworkBehaviour
 
     static void OnHealthChanged(Changed<BaseCharacter> changed)
     {
+        changed.LoadOld();
+        var oldHp = changed.Behaviour.initHealth;
         changed.LoadNew();
         var newHp = changed.Behaviour.initHealth;
 
-        if (changed.Behaviour.Object.HasInputAuthority && changed.Behaviour.initHealth != changed.Behaviour.maxHealth)
+        if (changed.Behaviour.Object.HasInputAuthority && oldHp != newHp)
         {
             changed.Behaviour.damageScreen.FadeIn(changed.Behaviour.damageScreenvalue, changed.Behaviour.damageScreenDuration);
             changed.Behaviour.statsScreen.SetHealthStats(changed.Behaviour.initHealth, changed.Behaviour.maxHealth);
@@ -47,8 +49,9 @@ public abstract class BaseCharacter : NetworkBehaviour
 
     protected virtual void Die()
     {
-        foreach (var weapon in weaponsHolder.weaponsList)
+        for (int i = 0; i < weaponsHolder.weaponsList.Count; i++)
         {
+            var weapon = weaponsHolder.weaponsList[i];
             if (weapon.isDropable)
             {
                 weapon.DropWeapon();

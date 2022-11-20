@@ -42,17 +42,38 @@ public class FusionCallbacks : SimulationBehaviour, INetworkRunnerCallbacks
     }
     void Update()
     {
-        if (mouse.leftButton.wasPressedThisFrame)
-            networkInput.buttons.Set(MyButtons.Fire, true);
-        if (keyboard.spaceKey.wasReleasedThisFrame)
+        if (mouse.leftButton.wasPressedThisFrame) // player attack button
+            networkInput.buttons.Set(MyButtons.Fire, true); 
+        if (keyboard.spaceKey.wasReleasedThisFrame) // jump end
             networkInput.buttons.Set(MyButtons.SpaceReleased, true);
-        if (keyboard.gKey   .wasPressedThisFrame)
+        if (keyboard.gKey.wasPressedThisFrame) // player ready button
             networkInput.buttons.Set(MyButtons.Ready, true);
-        if (keyboard.spaceKey.wasPressedThisFrame)
+        if (keyboard.spaceKey.wasPressedThisFrame) // jump
             networkInput.buttons.Set(MyButtons.Jump, true);
-
+        if (Keyboard.current.fKey.wasPressedThisFrame)
+        {
+            networkInput.buttons.Set(MyButtons.DropWeapon, true);
+        }
         networkInput.mousex = Input.GetAxisRaw("Mouse X");
         networkInput.mousey = Input.GetAxisRaw("Mouse Y");
+        networkInput.scrollWheel = Input.GetAxisRaw("Mouse ScrollWheel");
+        SwitchWeaponWithKeys();
+    }
+
+    void SwitchWeaponWithKeys()
+    {
+        if (keyboard.digit1Key.wasPressedThisFrame)
+        {
+            networkInput.buttons.Set(MyButtons.Keyboard1Key, true);
+        }
+        if (keyboard.digit2Key.wasPressedThisFrame)
+        {
+            networkInput.buttons.Set(MyButtons.Keyboard2Key, true);
+        }
+        if (keyboard.digit3Key.wasPressedThisFrame)
+        {
+            networkInput.buttons.Set(MyButtons.Keyboard3Key, true);
+        }
     }
 
     public void SetConnectionStatus(ConnectionStatus status)

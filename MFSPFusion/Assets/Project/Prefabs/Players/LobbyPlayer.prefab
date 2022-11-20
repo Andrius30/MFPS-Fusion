@@ -169,6 +169,7 @@ MonoBehaviour:
   _interpolationDataSource: 0
   snappiness: 6
   returnSpeed: 5
+  evaluateTime: 2
   animationCurve:
     serializedVersion: 2
     m_Curve:
@@ -693,6 +694,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _interpolationDataSource: 0
   weapons:
+  - {fileID: 6143484032133198266, guid: e3b0dbe3acd03584ca5cb0516e93defa, type: 3}
   - {fileID: 626006647963966313, guid: 148b51775e163e542b2706537efeddeb, type: 3}
   - {fileID: 3224895893714142483, guid: f8bf5f3a211d8b34d98878cbbfd4fa94, type: 3}
   weaponsList: []

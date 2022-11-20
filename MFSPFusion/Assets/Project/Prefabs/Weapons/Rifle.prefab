@@ -93,7 +93,7 @@ BoxCollider:
   m_GameObject: {fileID: 2789290803302920357}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
@@ -156,6 +156,7 @@ GameObject:
   - component: {fileID: 729325018976144535}
   - component: {fileID: 3220872536770018502}
   - component: {fileID: -4184468990182916789}
+  - component: {fileID: 9203055151634027531}
   m_Layer: 0
   m_Name: Rifle
   m_TagString: Untagged
@@ -196,12 +197,12 @@ MonoBehaviour:
   weaponID: 1
   data: {fileID: 11400000, guid: a7450f0e659298d458130b844aaf1a30, type: 2}
   isDropable: 1
-  thisWeaponPrefab: {fileID: 729325018976144535}
   _isEquiped:
     _value: 0
   rb: {fileID: 3220872536770018502}
   weaponCollider: {fileID: 3038208092130704908}
   weaponTriggerCollider: {fileID: -4184468990182916789}
+  gunID: 0
   maxAmmoAmount: 90
   maxAmoAtClipAmount: 30
   weaponBarel: {fileID: 4160607113075796667}
@@ -231,6 +232,7 @@ MonoBehaviour:
   NestedObjects: []
   NetworkedBehaviours:
   - {fileID: 3224895893714142483}
+  - {fileID: 9203055151634027531}
   - {fileID: 3907103487283821894}
   SimulationBehaviours: []
 --- !u!54 &3220872536770018502
@@ -258,10 +260,38 @@ BoxCollider:
   m_GameObject: {fileID: 4249968158275321913}
   m_Material: {fileID: 0}
   m_IsTrigger: 1
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &9203055151634027531
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4249968158275321913}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1710889294, guid: e725a070cec140c4caffb81624c8c787, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _interpolationDataSource: 0
+  InterpolationSpace: 0
+  InterpolationTarget: {fileID: 6485284587162655100}
+  InterpolateErrorCorrection: 1
+  InterpolatedErrorCorrectionSettings:
+    MinRate: 3.3
+    MaxRate: 10
+    PosBlendStart: 0.25
+    PosBlendEnd: 1
+    PosMinCorrection: 0.025
+    PosTeleportDistance: 2
+    RotBlendStart: 0.1
+    RotBlendEnd: 0.5
+    RotTeleportRadians: 1.5
+  UseLegacySharedModeInterpolation: 0
+  TargetInterpolationDelay: 0.03
 --- !u!1 &4362267166035255935
 GameObject:
   m_ObjectHideFlags: 0

@@ -182,9 +182,9 @@ public class PlayerController : BaseCharacter
 
     void OnTriggerEnter(Collider other)
     {
-        var weapon = other.GetComponent<Weapon>();
-        if (weapon != null && !weapon.isEquiped)
+        if (other.gameObject.layer == 7)
         {
+            var weapon = other.GetComponent<Weapon>();
             weaponsHolder.PickWeapon(weapon);
         }
     }

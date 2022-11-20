@@ -12,13 +12,18 @@ enum MyButtons
     LeftCtrl = 7,
     Ready = 8,
     Fire = 9,
-    FireHold
-    //LeftCtrlReleased = 9,
+    FireHold = 10,
+    Keyboard1Key = 11,
+    Keyboard2Key = 12,
+    Keyboard3Key = 13,
+    DropWeapon = 14
+
 }
 public struct NetworkInputs : INetworkInput
 {
     public NetworkButtons buttons;
     public float mousex;
     public float mousey;
+    public float scrollWheel;
     public bool leftCtrlReleased;
 }
