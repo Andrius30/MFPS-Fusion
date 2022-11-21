@@ -13,14 +13,17 @@ public abstract class Weapon : NetworkBehaviour
     [Networked] protected TickTimer cooldownTimer { get; set; }
     protected Animator animator;
     protected int shootTrigger = Animator.StringToHash("Shoot");
+    protected int weaponBobTrigger = Animator.StringToHash("WeaponBob");
     public Rigidbody rb;
     public BoxCollider weaponCollider;
     public BoxCollider weaponTriggerCollider;
+    protected PlayerController character;
 
 
     protected virtual void Start()
     {
         if (!isEquiped) return;
+        character = transform.root.GetComponent<PlayerController>();
         animator = GetComponentInChildren<Animator>();
         ToggleComponents(Object, false);
     }
@@ -33,6 +36,11 @@ public abstract class Weapon : NetworkBehaviour
         if (!isEquiped) return;
         Attack();
         if (GetInput<NetworkInputs>(out var input) == false) return;
+        if(character != null && character.moveDirection.z > 0 || character.moveDirection.z < 0)
+        {
+            animator.SetTrigger(weaponBobTrigger);
+        }
+
         if (input.buttons.IsSet(MyButtons.DropWeapon))
         {
             DropCurrentWeapon();
@@ -43,9 +51,10 @@ public abstract class Weapon : NetworkBehaviour
     {
         if (isEquiped)
         {
+            weaponID = Object.InputAuthority.PlayerId;
             foreach (var weaponHolder in FindObjectsOfType<WeaponsHolder>())
             {
-                if (weaponHolder.weaponHolderId == Object.InputAuthority.PlayerId)
+                if (weaponHolder.weaponHolderId == weaponID)
                 {
                     transform.SetParent(weaponHolder.transform);
                     transform.localPosition = data.weaponPositionAtHand;

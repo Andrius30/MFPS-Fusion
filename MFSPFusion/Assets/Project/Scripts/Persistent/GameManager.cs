@@ -65,7 +65,8 @@ public class GameManager : MonoBehaviour
         if (sceneIndex == 2) // lobby
         {
             var lobbySpawner = FindObjectOfType<LobbySpawner>();
-            controller.transform.position = lobbySpawner.GetSpawnPosition();
+            SpawnPosition pos = lobbySpawner.GetRandomSpawnPosition();
+            controller.transform.position = pos.transform.position;
         }
         else if (sceneIndex == 3) // gameplay
         {

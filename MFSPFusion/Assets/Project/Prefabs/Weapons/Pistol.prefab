@@ -46,6 +46,7 @@ GameObject:
   - component: {fileID: 1631824496014196477}
   - component: {fileID: 2847834505427133027}
   - component: {fileID: -5319979928468926529}
+  - component: {fileID: 5910060675712967391}
   m_Layer: 0
   m_Name: Pistol
   m_TagString: Untagged
@@ -122,6 +123,7 @@ MonoBehaviour:
   NetworkedBehaviours:
   - {fileID: 626006647963966313}
   - {fileID: -5319979928468926529}
+  - {fileID: 5910060675712967391}
   - {fileID: 336207113526703575}
   SimulationBehaviours: []
 --- !u!65 &1631824496014196477
@@ -181,6 +183,28 @@ MonoBehaviour:
     RotTeleportRadians: 1.5
   UseLegacySharedModeInterpolation: 0
   TargetInterpolationDelay: 0.03
+--- !u!114 &5910060675712967391
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 626006647963966315}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d6f74bc91e1797f4d8a356c2fc3b238a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _interpolationDataSource: 0
+  amount: 0.3
+  maxSway: 0.4
+  smoothAmount: 1
+  tiltAmount: 6
+  maxTiltSway: 7
+  smoothAmountTilt: 12
+  tiltDirX: 1
+  tiltDirY: 1
+  tiltDirZ: 1
 --- !u!1 &1894341292502370689
 GameObject:
   m_ObjectHideFlags: 0

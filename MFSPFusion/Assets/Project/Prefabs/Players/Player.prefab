@@ -576,7 +576,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3023308580514410794}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0.228}
+  m_LocalPosition: {x: 0, y: 0, z: 0.321}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -941,6 +941,10 @@ PrefabInstance:
     - target: {fileID: 3719417990027118060, guid: f407f845f68f69a42a36dde55de30d32, type: 3}
       propertyPath: m_Name
       value: StatsCanvas
+      objectReference: {fileID: 0}
+    - target: {fileID: 3719417991352042706, guid: f407f845f68f69a42a36dde55de30d32, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3719417991352042706, guid: f407f845f68f69a42a36dde55de30d32, type: 3}
       propertyPath: m_AnchorMax.y

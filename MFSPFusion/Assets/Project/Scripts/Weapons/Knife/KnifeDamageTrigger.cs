@@ -7,7 +7,8 @@ public class KnifeDamageTrigger : MonoBehaviour
     void OnTriggerEnter(Collider other)
     {
         BaseCharacter character = other.GetComponent<BaseCharacter>();
-        if(character != null)
+        BaseCharacter thisChar = transform.root.GetComponent<BaseCharacter>();
+        if(character != null && character.GetInstanceID() != thisChar.GetInstanceID())
         {
             Debug.Log($"Apply knife damage {knife.data.weaponDamage}");
             character.ApplyDamage(knife.data.weaponDamage);

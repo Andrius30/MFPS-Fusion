@@ -161,9 +161,8 @@ public class PlayerController : BaseCharacter
         {
             case PlayerStates.NORMAL:
                 currentSpeed = playerSpeed;
-                if (moveDirection.x > 0.1f || moveDirection.z > 0.1f)
+                if (moveDirection.x > 0f || moveDirection.z > 0f)
                 {
-                    Debug.Log($"{rb.velocity.magnitude}");
                     headbobController.isWalking = true;
                     headbobController.isRunning = false;
                 }

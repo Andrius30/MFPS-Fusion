@@ -19,6 +19,7 @@ public enum ConnectionStatus
 }
 public class FusionCallbacks : SimulationBehaviour, INetworkRunnerCallbacks
 {
+    public static Action onPlayerJoined;
     public static NetworkRunner runner;
     public GameObject lobbyPlayerPrefab;
     public GameObject playerPrefab;
@@ -43,7 +44,7 @@ public class FusionCallbacks : SimulationBehaviour, INetworkRunnerCallbacks
     void Update()
     {
         if (mouse.leftButton.wasPressedThisFrame) // player attack button
-            networkInput.buttons.Set(MyButtons.Fire, true); 
+            networkInput.buttons.Set(MyButtons.Fire, true);
         if (keyboard.spaceKey.wasReleasedThisFrame) // jump end
             networkInput.buttons.Set(MyButtons.SpaceReleased, true);
         if (keyboard.gKey.wasPressedThisFrame) // player ready button
@@ -127,6 +128,7 @@ public class FusionCallbacks : SimulationBehaviour, INetworkRunnerCallbacks
     {
         FindAndAssignLobbySpawner();
         CreateLobbyPlayer(runner, player);
+        onPlayerJoined?.Invoke();
     }
     public void OnPlayerLeft(NetworkRunner runner, PlayerRef player)
     {
@@ -184,8 +186,10 @@ public class FusionCallbacks : SimulationBehaviour, INetworkRunnerCallbacks
     {
         if (runner.IsServer)
         {
-            NetworkObject go = runner.Spawn(lobbyPlayerPrefab, lobbySpawner.GetSpawnPosition(), Quaternion.identity, player, (runner, go) =>
+            SpawnPosition spawnPosition = lobbySpawner.GetSpawnPosition();
+            NetworkObject go = runner.Spawn(lobbyPlayerPrefab, spawnPosition.transform.position, Quaternion.identity, player, (runner, go) =>
             {
+                spawnPosition.taken = true;
                 var temp = go.GetComponent<TemporaryPlayer>();
                 var playerController = go.GetComponent<PlayerController>();
                 playerController.thisPlayer = player;
