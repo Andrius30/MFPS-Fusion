@@ -27,13 +27,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1799836372}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.60300064, z: 0.362}
+  m_LocalPosition: {x: 0, y: 0, z: 0.36199993}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8919623294985742083}
   - {fileID: 4860003007523942036}
-  m_Father: {fileID: 3101726531471338928}
+  m_Father: {fileID: 5961647565990181960}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!20 &1799836374
@@ -150,7 +150,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1799836375}
+  - {fileID: 5961647565990181960}
   m_Father: {fileID: 5481290660445750062}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -304,6 +304,7 @@ GameObject:
   - component: {fileID: 6844066951704012268}
   - component: {fileID: 4179983698179045483}
   - component: {fileID: 226546052296593059}
+  - component: {fileID: 7790441612779215133}
   m_Layer: 0
   m_Name: LobbyPlayer
   m_TagString: Untagged
@@ -369,6 +370,7 @@ MonoBehaviour:
   hitboxRoot: {fileID: 6844066951704012268}
   statsScreen: {fileID: 7717345858117542405}
   weaponsHolder: {fileID: 8234619700735038303}
+  rb: {fileID: 0}
   currentState: 0
   playerSpeed: 12
   playerSprintSpeed: 18
@@ -405,6 +407,7 @@ MonoBehaviour:
   isCrouching: 0
   isSprinting: 0
   isClimbing: 0
+  headbobController: {fileID: 7790441612779215133}
 --- !u!114 &-172637552925719393
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -530,6 +533,30 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.86712605, y: 1.8011832, z: 0.84233856}
   m_Center: {x: 0.008298099, y: 0.00042039156, z: 0.027463168}
+--- !u!114 &7790441612779215133
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1116383842884122497}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 52b68d69a4f270c4c9d03433fa931349, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  controller: {fileID: 1116383842884122557}
+  head: {fileID: 5961647565990181960}
+  cameraTransform: {fileID: 1799836375}
+  walkingFrequency: 5
+  runningFrequency: 8
+  horizontalAmplitude: 0.1
+  verticalAmplitude: 0.1
+  smoothing: 0.1
+  isWalking: 0
+  isRunning: 0
+  walkingTime: 0
+  targetCameraPos: {x: 0, y: 0, z: 0}
 --- !u!1 &1116383843519473496
 GameObject:
   m_ObjectHideFlags: 0
@@ -693,12 +720,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _interpolationDataSource: 0
-  weapons:
-  - {fileID: 6143484032133198266, guid: e3b0dbe3acd03584ca5cb0516e93defa, type: 3}
-  - {fileID: 626006647963966313, guid: 148b51775e163e542b2706537efeddeb, type: 3}
-  - {fileID: 3224895893714142483, guid: f8bf5f3a211d8b34d98878cbbfd4fa94, type: 3}
   weaponsList: []
   _weaponHolderId: 0
+  _currentWeaponIndex: 0
 --- !u!1 &4033632882016859893
 GameObject:
   m_ObjectHideFlags: 0
@@ -749,6 +773,38 @@ MonoBehaviour:
   Offset: {x: 0, y: 0, z: 0}
   Root: {fileID: 6844066951704012268}
   GizmosColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+--- !u!1 &4302837057949213440
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5961647565990181960}
+  m_Layer: 0
+  m_Name: Head
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5961647565990181960
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4302837057949213440}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.498, z: -0.248}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1799836375}
+  m_Father: {fileID: 3101726531471338928}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4554079176114871084
 GameObject:
   m_ObjectHideFlags: 0

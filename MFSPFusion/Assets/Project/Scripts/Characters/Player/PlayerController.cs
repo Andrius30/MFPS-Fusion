@@ -76,6 +76,7 @@ public class PlayerController : BaseCharacter
     #endregion
 
     #region Class objects
+    [SerializeField] HeadbobController headbobController;
     PlayerModel playerModel;
     [HideInInspector] public PlayerData playerData;
     PlayerMove playerMove;
@@ -89,8 +90,9 @@ public class PlayerController : BaseCharacter
     #endregion
 
 
-    void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         playerModel = new PlayerModel(this);
         playerData = new PlayerData();
         playerMove = new PlayerMove(this);
@@ -159,9 +161,22 @@ public class PlayerController : BaseCharacter
         {
             case PlayerStates.NORMAL:
                 currentSpeed = playerSpeed;
+                if (moveDirection.x > 0.1f || moveDirection.z > 0.1f)
+                {
+                    Debug.Log($"{rb.velocity.magnitude}");
+                    headbobController.isWalking = true;
+                    headbobController.isRunning = false;
+                }
+                else
+                {
+                    headbobController.isWalking = false;
+                    headbobController.isRunning = false;
+                }
                 playerMove.Move(input);
                 break;
             case PlayerStates.SPRINT:
+                headbobController.isWalking = false;
+                headbobController.isRunning = true;
                 currentSpeed = playerSprintSpeed;
                 playerMove.Move(input);
                 break;

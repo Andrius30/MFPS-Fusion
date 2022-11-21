@@ -29,7 +29,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 6389850262609453161}
+  - {fileID: 7606013312287015004}
   m_Father: {fileID: 2467725152009893471}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -121,6 +121,7 @@ GameObject:
   - component: {fileID: 7306814486693937774}
   - component: {fileID: -3967365536850047969}
   - component: {fileID: 7507128976429940181}
+  - component: {fileID: 6170388013819668700}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -185,6 +186,7 @@ MonoBehaviour:
   hitboxRoot: {fileID: 7306814486693937774}
   statsScreen: {fileID: 6812829535725757251}
   weaponsHolder: {fileID: 631275657485583506}
+  rb: {fileID: 0}
   currentState: 0
   playerSpeed: 12
   playerSprintSpeed: 18
@@ -221,6 +223,7 @@ MonoBehaviour:
   isCrouching: 0
   isSprinting: 0
   isClimbing: 0
+  headbobController: {fileID: 6170388013819668700}
 --- !u!114 &-172637552925719393
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -323,6 +326,30 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.86712605, y: 1.8011832, z: 0.84233856}
   m_Center: {x: 0.008298099, y: 0.00042039156, z: 0.027463168}
+--- !u!114 &6170388013819668700
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1116383842884122497}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 52b68d69a4f270c4c9d03433fa931349, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  controller: {fileID: 1116383842884122557}
+  head: {fileID: 7606013312287015004}
+  cameraTransform: {fileID: 6389850262609453161}
+  walkingFrequency: 5
+  runningFrequency: 8
+  horizontalAmplitude: 0.1
+  verticalAmplitude: 0.1
+  smoothing: 0.1
+  isWalking: 0
+  isRunning: 0
+  walkingTime: 0
+  targetCameraPos: {x: 0, y: 0, z: 0}
 --- !u!1 &1116383843519473496
 GameObject:
   m_ObjectHideFlags: 0
@@ -648,12 +675,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4681522373822656847}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.60300064, z: 0.362}
+  m_LocalPosition: {x: 0, y: 0, z: 0.36200017}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4702407252486281366}
-  m_Father: {fileID: 1768267373429446444}
+  m_Father: {fileID: 7606013312287015004}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!20 &9107274851511822579
@@ -740,6 +767,38 @@ MonoBehaviour:
   m_RequiresDepthTexture: 0
   m_RequiresColorTexture: 0
   m_Version: 2
+--- !u!1 &4944281603158143119
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7606013312287015004}
+  m_Layer: 0
+  m_Name: Head
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7606013312287015004
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4944281603158143119}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.5, z: -0.215}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 6389850262609453161}
+  m_Father: {fileID: 1768267373429446444}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &9206728318277958341
 GameObject:
   m_ObjectHideFlags: 0
@@ -785,12 +844,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _interpolationDataSource: 0
-  weapons:
-  - {fileID: 6143484032133198266, guid: e3b0dbe3acd03584ca5cb0516e93defa, type: 3}
-  - {fileID: 626006647963966313, guid: 148b51775e163e542b2706537efeddeb, type: 3}
-  - {fileID: 3224895893714142483, guid: f8bf5f3a211d8b34d98878cbbfd4fa94, type: 3}
   weaponsList: []
   _weaponHolderId: 0
+  _currentWeaponIndex: 0
 --- !u!1001 &3559674166618993543
 PrefabInstance:
   m_ObjectHideFlags: 0

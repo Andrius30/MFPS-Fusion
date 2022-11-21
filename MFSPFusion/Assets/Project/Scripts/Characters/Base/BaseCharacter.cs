@@ -16,7 +16,12 @@ public abstract class BaseCharacter : NetworkBehaviour
     public HitboxRoot hitboxRoot;
     public PlayerStatsScreen statsScreen;
     public WeaponsHolder weaponsHolder;
+    [HideInInspector] public Rigidbody rb;
 
+    protected virtual void Awake()
+    {
+        rb = GetComponent<Rigidbody>();
+    }
 
     static void OnHealthChanged(Changed<BaseCharacter> changed)
     {
