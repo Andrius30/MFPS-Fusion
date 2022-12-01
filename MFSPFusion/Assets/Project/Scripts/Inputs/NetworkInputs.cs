@@ -13,10 +13,13 @@ enum MyButtons
     Ready = 8,
     Fire = 9,
     FireHold = 10,
-    Keyboard1Key = 11,
-    Keyboard2Key = 12,
-    Keyboard3Key = 13,
-    DropWeapon = 14
+    FireUp = 11,
+    Keyboard1Key = 12,
+    Keyboard2Key = 13,
+    Keyboard3Key = 14,
+    Keyboard4Key = 15,
+    DropWeapon = 16,
+    PickKey = 17
 
 }
 public struct NetworkInputs : INetworkInput

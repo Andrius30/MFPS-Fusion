@@ -9,6 +9,7 @@ public abstract class Weapon : NetworkBehaviour
     public int weaponID;
     public WeaponData data;
     public bool isDropable = false;
+    public bool isDefault = false;
     [HideInInspector, Networked] public NetworkBool isEquiped { get; set; }
     [Networked] protected TickTimer cooldownTimer { get; set; }
     protected Animator animator;
@@ -28,7 +29,7 @@ public abstract class Weapon : NetworkBehaviour
         ToggleComponents(Object, false);
     }
 
-    public abstract void Attack();
+    public virtual void Attack() { }
     public virtual void Update() { }
 
     public override void FixedUpdateNetwork()
@@ -36,7 +37,7 @@ public abstract class Weapon : NetworkBehaviour
         if (!isEquiped) return;
         Attack();
         if (GetInput<NetworkInputs>(out var input) == false) return;
-        if(character != null && character.moveDirection.z > 0 || character.moveDirection.z < 0)
+        if(character != null && (character.moveDirection.z > 0 || character.moveDirection.z < 0))
         {
             animator.SetTrigger(weaponBobTrigger);
         }

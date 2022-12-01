@@ -16,11 +16,15 @@ public abstract class BaseCharacter : NetworkBehaviour
     public HitboxRoot hitboxRoot;
     public PlayerStatsScreen statsScreen;
     public WeaponsHolder weaponsHolder;
+    public Camera cam;
     [HideInInspector] public Rigidbody rb;
 
-    protected virtual void Awake()
+    protected virtual void Awake() { }
+
+    public override void Spawned()
     {
         rb = GetComponent<Rigidbody>();
+        initHealth = maxHealth;
     }
 
     static void OnHealthChanged(Changed<BaseCharacter> changed)
@@ -46,10 +50,6 @@ public abstract class BaseCharacter : NetworkBehaviour
     {
         if (initHealth <= 0) return;
         initHealth -= damage;
-        //if (initHealth <= 0)
-        //{
-        //    Die();
-        //}
     }
 
     protected virtual void Die()
@@ -65,4 +65,6 @@ public abstract class BaseCharacter : NetworkBehaviour
         GameManager.instance.RespawnPlayer(this);
         gameObject.SetActive(false);
     }
+
+
 }

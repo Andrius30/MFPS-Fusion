@@ -1,5 +1,6 @@
 using Fusion;
 using Sirenix.OdinInspector;
+using TMPro;
 using UnityEngine;
 
 public class PlayerController : BaseCharacter
@@ -16,6 +17,7 @@ public class PlayerController : BaseCharacter
     }
 
     public PlayerRef thisPlayer;
+    public TextMeshProUGUI infoText;
 
     #region Move settings
     [FoldoutGroup("Move settings")] public PlayerStates currentState;
@@ -121,7 +123,36 @@ public class PlayerController : BaseCharacter
     void Update()
     {
         if (Object.HasInputAuthority)
+        {
             playerModel.RotateLocalyX();
+        }
+    }
+
+    void CheckPickableWeapons(NetworkInputs input)
+    {
+        Debug.DrawRay(cam.transform.position, cam.transform.forward * 2, Color.red);
+        HitOptions options = HitOptions.IncludePhysX | HitOptions.SubtickAccuracy | HitOptions.IgnoreInputAuthority;
+        if (Runner.LagCompensation.Raycast(cam.transform.position, cam.transform.forward, 2, Object.InputAuthority, out LagCompensatedHit hit, -1, options))
+        {
+            var weapon = hit.GameObject.transform.root.GetComponent<Weapon>();
+            if (weapon != null)
+            {
+                if (weapon is Granade)
+                {
+                    var granade = (Granade)weapon;
+                    if (granade.isLaunched) return;
+                }
+                infoText.text = $"Press [E] to pick {weapon.data.weaponName}";
+                if (input.buttons.IsSet(MyButtons.PickKey))
+                {
+                    weaponsHolder.PickWeapon(weapon);
+                }
+            }
+            else
+            {
+                infoText.text = $"";
+            }
+        }
     }
     public void ChangeState(PlayerStates newState)
     {
@@ -134,6 +165,7 @@ public class PlayerController : BaseCharacter
     {
         if (GetInput<NetworkInputs>(out var input) == false) return;
 
+        CheckPickableWeapons(input);
         ChangeSpeedBasedOnState(input);
         playerModel.RotatePlayer(input);
         playerJump.Jump(input);

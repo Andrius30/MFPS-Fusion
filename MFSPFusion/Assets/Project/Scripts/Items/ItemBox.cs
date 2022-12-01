@@ -9,14 +9,13 @@ public class ItemBox : MonoBehaviour
 
     void Spawn()
     {
-        Debug.Log($"Start called {FusionCallbacks.runner.IsServer}");
         int i = 0;
         foreach (var tr in spawnPositions)
         {
             if (FusionCallbacks.runner.IsServer)
             {
-                Debug.Log($"Spawn items {items[i].name}");
                 var obj = FusionCallbacks.runner.Spawn(items[i], tr.position, tr.rotation);
+                //obj.transform.SetParent(transform);
                 var rb = obj.GetComponent<Rigidbody>();
                 rb.isKinematic = true;
                 i++;
@@ -26,10 +25,10 @@ public class ItemBox : MonoBehaviour
 
     void OnEnable()
     {
-        FusionCallbacks.onPlayerJoined += Spawn;
+        FusionCallbacks.onConnected += Spawn;
     }
     void OnDisable()
     {
-        FusionCallbacks.onPlayerJoined -= Spawn;
+        FusionCallbacks.onConnected -= Spawn;
     }
 }

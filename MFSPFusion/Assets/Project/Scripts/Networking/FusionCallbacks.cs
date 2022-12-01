@@ -19,7 +19,7 @@ public enum ConnectionStatus
 }
 public class FusionCallbacks : SimulationBehaviour, INetworkRunnerCallbacks
 {
-    public static Action onPlayerJoined;
+    public static Action onConnected;
     public static NetworkRunner runner;
     public GameObject lobbyPlayerPrefab;
     public GameObject playerPrefab;
@@ -43,21 +43,29 @@ public class FusionCallbacks : SimulationBehaviour, INetworkRunnerCallbacks
     }
     void Update()
     {
-        if (mouse.leftButton.wasPressedThisFrame) // player attack button
-            networkInput.buttons.Set(MyButtons.Fire, true);
+        #region Keyboard
         if (keyboard.spaceKey.wasReleasedThisFrame) // jump end
             networkInput.buttons.Set(MyButtons.SpaceReleased, true);
         if (keyboard.gKey.wasPressedThisFrame) // player ready button
             networkInput.buttons.Set(MyButtons.Ready, true);
         if (keyboard.spaceKey.wasPressedThisFrame) // jump
             networkInput.buttons.Set(MyButtons.Jump, true);
-        if (Keyboard.current.fKey.wasPressedThisFrame)
-        {
+        if (keyboard.fKey.wasPressedThisFrame)
             networkInput.buttons.Set(MyButtons.DropWeapon, true);
-        }
+        if (keyboard.eKey.wasPressedThisFrame)
+            networkInput.buttons.Set(MyButtons.PickKey, true);
+        #endregion
+
+        #region Mouse
+        if (mouse.leftButton.wasPressedThisFrame) // player attack button
+            networkInput.buttons.Set(MyButtons.Fire, true);
+        if (mouse.leftButton.wasReleasedThisFrame)
+            networkInput.buttons.Set(MyButtons.FireUp, true);
         networkInput.mousex = Input.GetAxisRaw("Mouse X");
         networkInput.mousey = Input.GetAxisRaw("Mouse Y");
-        networkInput.scrollWheel = Input.GetAxisRaw("Mouse ScrollWheel");
+        networkInput.scrollWheel = Input.GetAxisRaw("Mouse ScrollWheel"); 
+        #endregion
+
         SwitchWeaponWithKeys();
     }
 
@@ -74,6 +82,10 @@ public class FusionCallbacks : SimulationBehaviour, INetworkRunnerCallbacks
         if (keyboard.digit3Key.wasPressedThisFrame)
         {
             networkInput.buttons.Set(MyButtons.Keyboard3Key, true);
+        }
+        if (keyboard.digit4Key.wasPressedThisFrame)
+        {
+            networkInput.buttons.Set(MyButtons.Keyboard4Key, true);
         }
     }
 
@@ -115,6 +127,7 @@ public class FusionCallbacks : SimulationBehaviour, INetworkRunnerCallbacks
             SceneManager = levelManager
         });
         SetConnectionStatus(ConnectionStatus.Connected);
+        onConnected?.Invoke();
     }
     public void OnSceneLoadDone(NetworkRunner runner)
     {
@@ -128,7 +141,7 @@ public class FusionCallbacks : SimulationBehaviour, INetworkRunnerCallbacks
     {
         FindAndAssignLobbySpawner();
         CreateLobbyPlayer(runner, player);
-        onPlayerJoined?.Invoke();
+       
     }
     public void OnPlayerLeft(NetworkRunner runner, PlayerRef player)
     {

@@ -11,8 +11,11 @@ public class WeaponsHolder : NetworkBehaviour
     public List<Weapon> weaponsList = new List<Weapon>();
 
     [Networked] public int weaponHolderId { get; set; }
+    public Launcher launcher;
 
     [Networked(OnChanged = nameof(OnChangedSwitchWeapon))] public int currentWeaponIndex { get; set; }
+    public int maxGranades = 1;
+    public int currentGranades = 0;
 
     static void OnChangedSwitchWeapon(Changed<WeaponsHolder> changed)
     {
@@ -66,6 +69,15 @@ public class WeaponsHolder : NetworkBehaviour
         }
     }
 
+    public Weapon GetWeaponById(int id)
+    {
+        foreach (var weapon in weaponsList)
+        {
+            if (weapon.weaponID == id)
+                return weapon;
+        }
+        return null;
+    }
     public override void Spawned()
     {
         weaponHolderId = Object.InputAuthority.PlayerId;
@@ -82,6 +94,11 @@ public class WeaponsHolder : NetworkBehaviour
     {
         if (Runner.IsServer)
         {
+            if (weapon is Granade)
+            {
+                if (currentGranades + 1 > maxGranades) return;
+                currentGranades++;
+            }
             Weapon wep = null;
 
             foreach (var wp in GameManager.instance.allWeapons)
@@ -93,15 +110,16 @@ public class WeaponsHolder : NetworkBehaviour
                 }
             }
             Runner.Despawn(weapon.Object);
+            if (wep == null) return;
+            wep.isEquiped = true;
             wep.gameObject.layer = 0;
             wep.transform.SetParent(transform);
             wep.transform.localPosition = wep.data.weaponPositionAtHand;
             wep.transform.localRotation = wep.data.weaponRotationAthand;
             wep.ToggleComponents(wep.Object, false);
-            wep.isEquiped = true;
             weaponsList.Add(wep);
-            currentWeaponIndex = wep.weaponID;
-
+            SwitchWeapon(weaponsList.Count - 1);
+            RPC_SwitchWeapon(weaponsList.Count - 1);
         }
     }
 
@@ -116,6 +134,7 @@ public class WeaponsHolder : NetworkBehaviour
         if (!Runner.IsServer) return;
         foreach (var weapon in GameManager.instance.allWeapons)
         {
+            if(!weapon.isDefault) continue;
             var gm = Runner.Spawn(weapon, inputAuthority: Object.InputAuthority);
             gm.transform.SetParent(transform);
             gm.transform.localPosition = weapon.data.weaponPositionAtHand;
@@ -125,7 +144,7 @@ public class WeaponsHolder : NetworkBehaviour
             weaponsList.Add(wep);
         }
     }
-    void SwitchWeapon(int index)
+    public void SwitchWeapon(int index)
     {
         if (weaponsList.Count <= 0) return;
         if (index < weaponsList.Count)
